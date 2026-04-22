@@ -1,49 +1,5 @@
-# 🔐 Environment variables
 .env
-.env.*
-!.env.example
-
-# 📦 Dependencies
 node_modules/
-
-# 🧾 Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# 🖥️ OS files
-.DS_Store
-Thumbs.db
-
-# 🧠 IDE / Editor
 .vscode/
-.idea/
-*.swp
-*.swo
-
-# 📁 Build / Output
-dist/
-build/
-out/
-
-# 🧪 Coverage
-coverage/
-
-# ⚙️ Runtime files
-*.pid
-*.seed
-*.pid.lock
-
-# 🔄 Cache
-.cache/
-.temp/
-.tmp/
-
-# 🔑 Secrets / keys
-*.pem
-*.key
-
-# 🧱 Optional configs (if generated locally)
-config/local.js
+*.log
+.DS_Store
