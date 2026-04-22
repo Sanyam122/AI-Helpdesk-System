@@ -1,0 +1,137 @@
+<% layout("/layouts/boilerplate") %>
+
+<style>
+  .create {
+    background-color: #f6f7f8;
+    min-height: 100vh;
+  }
+
+  form {
+    background-color: white;
+  }
+
+  .ticket {
+    border-radius: 10px;
+  }
+</style>
+
+<body class="create p-3 p-md-4">
+  <!-------------------- Creating ticket section  --------------->
+
+  <div class="container-fluid">
+    <div class="row justify-content-center align-items-center">
+      <!-- Ticket Card -->
+      <div class="ticket col-12 col-sm-10 col-md-8 col-lg-6 p-4">
+        <!-- Heading -->
+        <div class="ticket-heading mb-4">
+          <span class="d-flex align-items-center gap-2 fs-4 fs-md-3">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="32"
+              height="32"
+              viewBox="0 0 16 16"
+            >
+              <path
+                fill="#137fec"
+                d="m14.61 6.914l-7.632 8.08a1.614 1.614 0 0 1-2.69-1.66L5.5 10H2.677A1.677 1.677 0 0 1 1.12 7.7l2.323-5.807A2.216 2.216 0 0 1 5.5.5h4c.968 0 1.637.967 1.298 1.873L10 4.5h3.569a1.431 1.431 0 0 1 1.04 2.414Z"
+              />
+            </svg>
+
+            <b>Raise a Ticket</b>
+          </span>
+
+          <p class="text-muted mt-2">
+            Our AI will automatically route your ticket to the right department
+            for faster solutions.
+          </p>
+        </div>
+
+        <!-------------- create ticket form --------------->
+        <form
+          method="post"
+          class="form p-3 p-md-4 rounded-4 row gap-2 shadow"
+          action="/helpdesk/dashboard/<%= ticket.id %>/edit?_method=PATCH"
+          nonvalidate
+        >
+          <!-- title -->
+          <label for="title" class="form-label">
+            <b>Ticket Title</b>
+          </label>
+
+          <input
+            value="<%= ticket.title %>"
+            type="text"
+            placeholder="Describe what's happening"
+            name="title"
+            class="form-control"
+            required
+            title="Enter a valid Title please."
+          />
+          <br />
+          <!-- Issue category -->
+          <label for="" class="form-label"><b>Issue Category</b></label>
+          <input
+            value="<%=ticket.category %>"
+            type="text"
+            placeholder="Select Department"
+            class="form-control"
+            name="category"
+            required
+            title="Enter a valid category please."
+          />
+          <!-- Priority -->
+          <label for="inputGroupSelect01" class="mt-3"><b>Priority</b></label>
+          <div class="input-group">
+            <label class="input-group-text" for="inputGroupSelect01"
+              >Priority</label
+            >
+            <select class="form-select" id="inputGroupSelect01" name="priority">
+              <option selected><%= ticket.priority %></option>
+              <option value="Normal">Normal</option>
+              <option value="Medium">Medium</option>
+              <option value="High">High</option>
+            </select>
+          </div>
+
+          <!-- Description -->
+          <label for="description" class="form-label mt-3"
+            ><b>Detailed Description</b></label
+          >
+          <textarea
+            name="description"
+            placeholder="Please provide as much detail as possible."
+            class="form-control"
+            required
+            title="Enter a valid description please."
+          >
+<%= ticket.description %></textarea
+          >
+
+          <br />
+          <hr />
+          <div
+            class="Sumbit-button d-md-flex justify-content-between align-items-center"
+          >
+            <p class="col-md-6 text-muted">
+              By submitting, you agree to our corporate data policies. AI
+              analysis will be performed on ticket contents.
+            </p>
+
+            <button class="btn btn-primary btn-lg me-md-5">
+              Submit Ticket
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                class="m-1"
+              >
+                <path fill="#ffffff" d="m0 0l20 10L0 20V0zm0 8v4l10-2L0 8z" />
+              </svg>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</body>

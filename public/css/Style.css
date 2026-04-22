@@ -1,0 +1,160 @@
+/* Light */
+@font-face {
+  font-family: "Delight";
+  src: url("../delight-font-family/delight-light.otf");
+  font-weight: 300;
+}
+
+/* Regular */
+@font-face {
+  font-family: "Delight";
+  src: url("../delight-font-family/delight-regular.otf");
+  font-weight: 400;
+}
+
+/* Medium */
+@font-face {
+  font-family: "Delight";
+  src: url("../delight-font-family/delight-medium.otf");
+  font-weight: 500;
+}
+
+/* Semibold */
+@font-face {
+  font-family: "Delight";
+  src: url("../delight-font-family/delight-semibold.otf");
+  font-weight: 600;
+}
+
+/* Bold */
+@font-face {
+  font-family: "Delight";
+  src: url("../delight-font-family/delight-bold.otf");
+  font-weight: 700;
+}
+
+* {
+  font-family: "Delight", sans-serif;
+  padding: 0.1rem;
+  overflow-x: hidden;
+}
+body {
+  width: 100vw !important;
+}
+
+a {
+  text-decoration: none !important;
+  cursor: pointer !important;
+}
+
+/* Navigation Bar */
+.myborder2 {
+  border: 2px solid white;
+}
+.myborder {
+  border: 3px solid black;
+}
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  margin-top: 1rem;
+  width: 90%;
+  place-items: center;
+}
+.weblogo {
+  height: 40px;
+  width: 40px;
+  border-radius: 24%;
+}
+
+.logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+.features {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+.login-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Dashboard Page  */
+.dashboard-container {
+  min-height: 100vh;
+}
+nav {
+  height: 64px;
+  width: auto;
+  overflow-y: hidden;
+}
+.online {
+  background-color: #75ffca;
+  font-size: x-small;
+  color: #008a55;
+}
+main {
+  background-color: #f9f9f9;
+}
+
+main .add-buttons {
+  display: flex;
+  justify-content: flex-start;
+  margin: auto;
+  gap: 0.5rem;
+  align-items: center;
+}
+.ai-bar {
+  background-color: #f9f9f9;
+}
+/*Sidebar*/
+aside {
+  svg {
+    height: 1.5rem;
+    width: 1.5rem;
+  }
+  a {
+    display: flex;
+    align-items: center;
+    color: black !important;
+  }
+  li {
+    height: fit-content;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    cursor: pointer;
+  }
+}
+
+li::-webkit-scrollbar {
+  display: none;
+}
+
+.logout {
+  height: 80vh;
+}
+
+.card .badge {
+  width: fit-content;
+}
+
+.tickets-section .card {
+  max-width: 600px;
+  width: 100%;
+}
+
+.shortcut-for-small {
+  width: 90%;
+  svg {
+    height: 1.5rem;
+    width: 1.5rem;
+  }
+}

@@ -1,0 +1,467 @@
+<% layout("/layouts/boilerplate") %>
+
+<style>
+  .quickCreate {
+    width: 90%;
+  }
+</style>
+<!-- Body -->
+<body class="dashboard position-relative">
+  <!-- Navbar -->
+  <nav class="d-flex align-items-center gap-3 px-3 w-100">
+    <!-- Logo -->
+    <a class="navbar-brand d-flex align-items-center" href="/home">
+      <img src="/logo/logo.png" width="40" height="40" class="rounded-circle" />
+      <b class="ms-2">Agentic AI</b>
+    </a>
+
+    <!-- Middle Items -->
+    <div class="list-items d-none d-lg-flex align-items-center">
+      <span class="fw-bold fs-5 ms-4">Active Queue</span>
+
+      <div class="online rounded-4 p-1 ms-3">
+        <b>ONLINE & RECEIVING</b>
+      </div>
+    </div>
+
+    <!-- Search -->
+    <div class="search ms-auto">
+      <form class="d-none d-sm-flex" style="max-width: 300px">
+        <input class="form-control" type="search" placeholder="Quick Search" />
+      </form>
+    </div>
+
+    <!-- Profile -->
+    <div class="card border-0 rounded-4 p-2 ms-3">
+      <div class="d-flex align-items-center">
+        <div class="fs-6 me-2 d-none d-md-block">
+          <h6 class="mb-0 fw-semibold"><%= user.username %></h6>
+          <small class="text-muted">Project Manager</small>
+        </div>
+
+        <img
+          src="images/photo2.png"
+          class="rounded-circle"
+          width="45"
+          height="45"
+        />
+      </div>
+    </div>
+  </nav>
+  <!----------- Shortcut on small screen size ------------->
+  <div
+    class="mb-2 shortcut-for-small d-flex justify-content-between align-items-center position-absolute bottom-0 start-50 translate-middle-x d-block d-sm-none"
+  >
+    <!-- b1 -->
+    <a href="/helpdesk/newTicket">
+      <button class="btn btn-light add rounded-3">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="200"
+          height="200"
+          viewBox="0 0 24 24"
+        >
+          <path
+            fill="#137fec"
+            d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"
+          />
+        </svg>
+      </button>
+    </a>
+    <!-- b2 -->
+    <a href="/performance">
+      <button class="btn btn-light ai rounded-3">
+        <svg
+          width="200"
+          height="200"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+        >
+          <path
+            fill="none"
+            stroke="#137fec"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 19c1.2-3.678 2.526-5.005 6-6c-3.474-.995-4.8-2.322-6-6c-1.2 3.678-2.526 5.005-6 6c3.474.995 4.8 2.322 6 6Zm-8-9c.6-1.84 1.263-2.503 3-3c-1.737-.497-2.4-1.16-3-3c-.6 1.84-1.263 2.503-3 3c1.737.497 2.4 1.16 3 3Zm1.5 10c.3-.92.631-1.251 1.5-1.5c-.869-.249-1.2-.58-1.5-1.5c-.3.92-.631 1.251-1.5 1.5c.869.249 1.2.58 1.5 1.5Z"
+          />
+        </svg>
+      </button>
+    </a>
+    <!-- b3 -->
+    <a href="/tickets"
+      ><button class="btn btn-light tickets rounded-3">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="200"
+          height="200"
+          viewBox="0 0 1025 768"
+        >
+          <path
+            fill="#137fec"
+            d="M1024.226 512v192q0 26-19 45t-45 19h-576v-32q0-13-9.5-22.5t-22.5-9.5t-22.5 9.5t-9.5 22.5v32h-256q-26 0-45-19t-19-45V512q53 0 90.5-37.5t37.5-90.5t-37.5-90.5T.226 256V64q0-26 19-45t45-19h256v32q0 13 9.5 22.5t22.5 9.5t22.5-9.5t9.5-22.5V0h576q26 0 45 19t19 45v192q-53 0-90.5 37.5t-37.5 90.5t37.5 90.5t90.5 37.5zm-640-352q0-13-9.5-22.5t-22.5-9.5t-22.5 9.5t-9.5 22.5v64q0 13 9.5 22.5t22.5 9.5t22.5-9.5t9.5-22.5v-64zm0 192q0-13-9.5-22.5t-22.5-9.5t-22.5 9.5t-9.5 22.5v64q0 13 9.5 22.5t22.5 9.5t22.5-9.5t9.5-22.5v-64zm0 192q0-13-9.5-22.5t-22.5-9.5t-22.5 9.5t-9.5 22.5v64q0 13 9.5 22.5t22.5 9.5t22.5-9.5t9.5-22.5v-64z"
+          />
+        </svg></button
+    ></a>
+    <!-- b4 -->
+    <a href="">
+      <button class="btn btn-light inbox rounded-3">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="200"
+          height="200"
+          viewBox="0 0 24 24"
+        >
+          <path
+            fill="#137fec"
+            d="M12.75 7a.75.75 0 0 0-1.5 0v4.19l-.72-.72a.75.75 0 1 0-1.06 1.06l2 2a.75.75 0 0 0 1.06 0l2-2a.75.75 0 1 0-1.06-1.06l-.72.72z"
+          />
+          <path
+            fill="#137fec"
+            d="M3.451 10.189a5.9 5.9 0 0 0-.201 1.957c0 .853.002 2.207.041 3.448c.02.656.052 1.291.1 1.809c.024.258.053.498.09.702a2.2 2.2 0 0 0 .178.598a3.75 3.75 0 0 0 1.639 1.638c.444.227.924.321 1.47.366c.531.043 1.187.043 2 .043h6.464c.813 0 1.469 0 2-.043c.546-.045 1.026-.14 1.47-.366a3.75 3.75 0 0 0 1.64-1.639c.094-.186.145-.415.177-.597c.037-.204.066-.444.09-.702c.048-.518.08-1.153.1-1.81c.039-1.245.04-2.606.041-3.459a5.9 5.9 0 0 0-.202-1.945l-.832-2.914l-.06-.209c-.344-1.223-.8-2.843-2.501-3.538c-.684-.279-1.474-.279-2.62-.278h-5.07c-1.146 0-1.935-.001-2.62.278c-1.701.695-2.157 2.315-2.501 3.538l-.06.21zm6.17-5.439h4.758c1.365 0 1.833.014 2.208.167c1.007.411 1.277 1.337 1.686 2.77l.833 2.914c.125.438.173.923.15 1.399h-.006v.086l-.01.132a2.25 2.25 0 0 1-2.022 2.021a6 6 0 0 1-.596.024h-.046a2.7 2.7 0 0 0-.545.036c-.489.1-.912.405-1.163.837c-.09.157-.148.33-.202.492l-.013.04c-.12.358-.211.452-.257.486c-.044.032-.163.096-.55.096h-3.693c-.376 0-.495-.058-.542-.09c-.044-.031-.142-.124-.264-.491l-.014-.04a2.6 2.6 0 0 0-.202-.493a1.75 1.75 0 0 0-1.163-.837a2.7 2.7 0 0 0-.545-.036h-.045a6 6 0 0 1-.596-.024a2.25 2.25 0 0 1-2.032-2.143V12h-.006a4.4 4.4 0 0 1 .15-1.4l.832-2.913c.41-1.433.68-2.359 1.686-2.77c.376-.153.843-.167 2.208-.167M4.79 15.547l-.015-.527a3.74 3.74 0 0 0 1.86.712c.255.025.505.032.743.031a7 7 0 0 1 .289.005a.25.25 0 0 1 .165.12l.017.042c.017.046.038.106.073.213c.162.485.394.94.824 1.242c.427.302.925.365 1.406.365h3.693c.512 0 1.016-.076 1.44-.388c.42-.31.638-.763.79-1.219c.036-.107.056-.168.073-.213c.015-.04.02-.046.017-.042a.25.25 0 0 1 .165-.12l.05-.003c.052-.002.121-.002.24-.002c.237 0 .487-.006.742-.03a3.74 3.74 0 0 0 1.86-.714q-.005.267-.014.528c-.02.644-.05 1.244-.094 1.717a7 7 0 0 1-.072.577a2 2 0 0 1-.042.186a2.25 2.25 0 0 1-.98.978c-.197.1-.458.17-.912.207c-.462.037-1.057.038-1.909.038H8.8c-.852 0-1.447 0-1.91-.038c-.453-.038-.714-.107-.911-.207a2.25 2.25 0 0 1-.984-.983l.004.007l-.002-.008a2 2 0 0 1-.04-.18a7 7 0 0 1-.072-.577a30 30 0 0 1-.095-1.717m11.54.221"
+          />
+        </svg>
+      </button>
+    </a>
+  </div>
+  <!----------------- My main , sidebar , AI ------------- -->
+  <div class="container-fluid">
+    <div class="row dashboard-container">
+      <!-- Sidebar -->
+      <aside
+        class="performance-sidebar col-lg-2 col-md-1 p-3 d-none d-md-block d-flex flex-column"
+      >
+        <ul class="navbar-nav d-flex flex-column h-100">
+          <li class="rounded-3 mb-3">
+            <a href="/helpdesk/dashboard"
+              ><svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="200"
+                height="200"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  fill="#000000"
+                  d="M21 2H3c-.6 0-1 .4-1 1v4h20V3c0-.6-.4-1-1-1zM2 15h9V9H2v6zm0 6c0 .6.4 1 1 1h8v-5H2v4zm11-6h9V9h-9v6zm0 7h8c.6 0 1-.4 1-1v-4h-9v5z"
+                />
+              </svg>
+              <span class="ms-2 d-none d-lg-inline">Dashboard</span></a
+            >
+          </li>
+
+          <li class="rounded-3 mb-3">
+            <a href="/tickets"
+              ><svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="200"
+                height="200"
+                viewBox="0 0 1025 768"
+              >
+                <path
+                  fill="#000000"
+                  d="M1024.226 512v192q0 26-19 45t-45 19h-576v-32q0-13-9.5-22.5t-22.5-9.5t-22.5 9.5t-9.5 22.5v32h-256q-26 0-45-19t-19-45V512q53 0 90.5-37.5t37.5-90.5t-37.5-90.5T.226 256V64q0-26 19-45t45-19h256v32q0 13 9.5 22.5t22.5 9.5t22.5-9.5t9.5-22.5V0h576q26 0 45 19t19 45v192q-53 0-90.5 37.5t-37.5 90.5t37.5 90.5t90.5 37.5zm-640-352q0-13-9.5-22.5t-22.5-9.5t-22.5 9.5t-9.5 22.5v64q0 13 9.5 22.5t22.5 9.5t22.5-9.5t9.5-22.5v-64zm0 192q0-13-9.5-22.5t-22.5-9.5t-22.5 9.5t-9.5 22.5v64q0 13 9.5 22.5t22.5 9.5t22.5-9.5t9.5-22.5v-64zm0 192q0-13-9.5-22.5t-22.5-9.5t-22.5 9.5t-9.5 22.5v64q0 13 9.5 22.5t22.5 9.5t22.5-9.5t9.5-22.5v-64z"
+                />
+              </svg>
+              <span class="ms-2 d-none d-lg-inline">Tickets</span></a
+            >
+          </li>
+
+          <li class="rounded-3 mb-3">
+            <a
+              ><svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="200"
+                height="200"
+                viewBox="0 0 26 26"
+              >
+                <path
+                  fill="#000000"
+                  d="M5.406 3c-1.3 0-2.396.87-2.843 2.063v.03l-2.5 7.595l-.063.156V19c0 2.2 1.8 4 4 4h18c2.2 0 4-1.8 4-4v-6.156l-.063-.156l-2.593-7.626C22.922 3.938 21.844 3 20.5 3H5.406zm0 2H20.5c.456 0 .79.275.969.75l2.5 7.25H16c0 1.7-1.3 3-3 3s-3-1.3-3-3H2.031l2.406-7.25c.153-.407.67-.75.97-.75z"
+                />
+              </svg>
+              <span class="ms-2 d-none d-lg-inline">Inbox</span></a
+            >
+          </li>
+
+          <li class="rounded-3 mb-3">
+            <a href="/helpdesk/newticket"
+              ><svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="200"
+                height="200"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  fill="#000000"
+                  d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"
+                />
+              </svg>
+              <span class="ms-2 d-none d-lg-inline">Raise Ticket</span></a
+            >
+          </li>
+
+          <small class="text-muted ms-2 d-none d-lg-inline mt-4">TOOLS</small>
+
+          <li class="rounded-3 mt-3">
+            <a href="/performance"
+              ><svg
+                width="200"
+                height="200"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  fill="#000000"
+                  d="M2 17.87a1 1 0 0 0-1 1v1.5a.25.25 0 0 0 .25.25h3.5a.25.25 0 0 0 .25-.25v-1.5a1 1 0 0 0-1-1Zm6-3a1 1 0 0 0-1 1v4.5a.25.25 0 0 0 .25.25h3.5a.25.25 0 0 0 .25-.25v-4.5a1 1 0 0 0-1-1Zm6-3.5a1 1 0 0 0-1 1v8a.25.25 0 0 0 .25.25h3.5a.25.25 0 0 0 .25-.25v-8a1 1 0 0 0-1-1Zm5.25 9.25h3.5a.25.25 0 0 0 .25-.25v-12a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v12a.25.25 0 0 0 .25.25M18.07 4.21l.31.46A.74.74 0 0 0 19 5a.74.74 0 0 0 .62-.38l2-3.5a.75.75 0 0 0 0-.79a.72.72 0 0 0-.71-.33l-4 .5a.75.75 0 0 0-.53 1.16l.3.46a.24.24 0 0 1-.07.34L2.45 11.92a1 1 0 0 0-.28 1.39a1 1 0 0 0 .83.44a.94.94 0 0 0 .55-.17l14.17-9.44a.25.25 0 0 1 .35.07M1 24h22a1 1 0 0 0 .31-1.95A1 1 0 0 0 23 22H1a1 1 0 0 0-.31.05A1 1 0 0 0 1 24"
+                />
+              </svg>
+              <span class="ms-2 d-none d-lg-inline">Performance</span></a
+            >
+          </li>
+
+          <li class="rounded-3 mt-auto">
+            <a href="/home"
+              ><svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="40"
+                height="40"
+                viewBox="0 0 24 24"
+                fill="#e8405f"
+              >
+                <g
+                  fill="none"
+                  stroke="#e8405f"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                >
+                  <path
+                    d="M14 8V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2v-2"
+                  />
+                  <path d="M9 12h12l-3-3m0 6l3-3" />
+                </g>
+              </svg>
+              <span class="ms-2 d-none d-lg-inline"
+                ><b style="color: #e8405f">Logout</b></span
+              ></a
+            >
+          </li>
+        </ul>
+      </aside>
+      <!--------------- Main ------------->
+      <main class="col-lg-7 col-md-7 col-12">
+        <div class="container-fluid">
+          <div class="add-buttons mt-2">
+            <a href=""
+              ><button class="btn btn-light p-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fill="none"
+                    stroke="#000000"
+                    stroke-linecap="round"
+                    stroke-width="2"
+                    d="M3 6h18M6 12h12m-9 6h6"
+                  />
+                </svg></button
+            ></a>
+
+            <a href=""
+              ><button class="btn btn-light p-1 d-none d-sm-block">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fill="#000000"
+                    d="M10 3v2a5 5 0 0 0-3.54 8.54l-1.41 1.41A7 7 0 0 1 10 3zm4.95 2.05A7 7 0 0 1 10 17v-2a5 5 0 0 0 3.54-8.54l1.41-1.41zM10 20l-4-4l4-4v8zm0-12V0l4 4l-4 4z"
+                  />
+                </svg></button
+            ></a>
+            <span>MY PRIORITY TICKETS (<%= user.count %>)</span>
+          </div>
+          <br />
+          <% for(let ticket of tickets) { %>
+          <div
+            class="tickets-section d-sm-flex justify-content-center align-items-center"
+          >
+            <div class="shadow card p-3 rounded-4 fs-sm-4">
+              <div
+                class="head d-flex justify-content-start align-items-center gap-2"
+              >
+                <span
+                  class="badge priorityBadge"
+                  data-priority="<%= ticket.priority %>"
+                >
+                  <%= ticket.priority %>
+                </span>
+                <h6 style="color: #137fec">
+                  #TKT-<%= ticket._id.toString().slice(-6).toUpperCase() %>
+                </h6>
+              </div>
+              <div class="card-title">
+                <b><%= ticket.title %></b>
+              </div>
+              <br />
+              <p><%= ticket.description %></p>
+              <hr />
+              <div
+                class="card-btn d-grid gap-2 d-md-flex justify-content-md-end"
+              >
+                <button class="btn btn-light btn-sm rounded-3" type="submit">
+                  <a
+                    href="/helpdesk/ticket/<%= ticket._id %>/edit"
+                    style="color: black"
+                  >
+                    <svg
+                      width="25"
+                      height="25"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 512 512"
+                    >
+                      <path
+                        fill="#000000"
+                        d="M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0L368 46.1l97.9 97.9l24.4-24.4c21.9-21.9 21.9-57.3 0-79.2zm-299.2 220c-6.1 6.1-10.8 13.6-13.5 21.9l-29.6 88.8c-2.9 8.6-.6 18.1 5.8 24.6s15.9 8.7 24.6 5.8l88.8-29.6c8.2-2.7 15.7-7.4 21.9-13.5L432 177.9L334.1 80zM96 64c-53 0-96 43-96 96v256c0 53 43 96 96 96h256c53 0 96-43 96-96v-96c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32z"
+                      />
+                    </svg>
+                    Edit
+                  </a>
+                </button>
+
+                <form
+                  method="post"
+                  action="/helpdesk/dashboard/<%= ticket._id %>/delete?_method=DELETE"
+                >
+                  <button class="btn btn-light btn-sm rounded-3">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 640 640"
+                      height="25"
+                      width="25"
+                    >
+                      <path
+                        fill="#dc143c"
+                        d="M232.7 69.9L224 96L128 96C110.3 96 96 110.3 96 128C96 145.7 110.3 160 128 160L512 160C529.7 160 544 145.7 544 128C544 110.3 529.7 96 512 96L416 96L407.3 69.9C402.9 56.8 390.7 48 376.9 48L263.1 48C249.3 48 237.1 56.8 232.7 69.9zM512 208L128 208L149.1 531.1C150.7 556.4 171.7 576 197 576L443 576C468.3 576 489.3 556.4 490.9 531.1L512 208z"
+                      />
+                    </svg>
+                    Delete
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <br />
+          <% } %>
+        </div>
+      </main>
+
+      <!-- Quick Create -->
+      <div class="ai-bar col-lg-3 col-md-4 d-none d-md-block p-0">
+        <div
+          class="quickCreate container p-4 shadow mt-2 me-5 rounded-4"
+          style="background-color: white"
+        >
+          <div class="Quick-create">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="40"
+              height="40"
+              viewBox="0 0 24 24"
+            >
+              <path
+                fill="#137fec"
+                d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"
+              />
+            </svg>
+            <span class="fs-5" style="color: #137fec"><b>Quick Create</b></span>
+          </div>
+          <form
+            class="p-2 needs-validation"
+            nonvalidate
+            method="post"
+            action="/helpdesk/dashboard"
+          >
+            <input
+              type="Text"
+              class="form-control required"
+              placeholder="Enter a title"
+              required
+              title="Enter a title"
+              name="title"
+            />
+            <div class="valid-feedback">Looks Good</div>
+            <br />
+            <input
+              required
+              type="text"
+              class="form-control required"
+              placeholder="Category"
+              title="Enter the department"
+              name="category"
+            />
+            <div class="valid-feedback">Looks Good</div>
+            <br />
+            <textarea
+              type="text"
+              class="form-control required"
+              placeholder="Description"
+              title="Enter a description."
+              name="description"
+            ></textarea>
+            <br />
+            <button class="btn btn-primary w-100" type="submit">
+              Create Ticket
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <iframe
+    src="/Chatbot/helpdeskChatbot.html"
+    width="350"
+    height="500"
+    style="
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 380px;
+      height: 600px;
+      border: none;
+      z-index: 9999;
+      background: transparent;
+    "
+  >
+  </iframe>
+</body>
+<!-- Changing badge color -->
+<script>
+  function updateBadges() {
+    const badges = document.querySelectorAll(".priorityBadge");
+
+    badges.forEach((badge) => {
+      const priority = badge.dataset.priority.toLowerCase();
+
+      badge.classList.remove(
+        "text-bg-danger",
+        "text-bg-warning",
+        "text-bg-success",
+      );
+
+      if (priority === "high") {
+        badge.classList.add("text-bg-danger"); // red
+      } else if (priority === "medium") {
+        badge.classList.add("text-bg-warning"); // yellow
+      } else {
+        badge.classList.add("text-bg-success"); // green
+      }
+    });
+  }
+  window.onload = updateBadges;
+</script>
