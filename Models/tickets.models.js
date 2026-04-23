@@ -22,6 +22,11 @@ const ticketSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "user",
     },
+    status: {
+      type: String,
+      enum:["Open","In Progress","Resolved"],
+      default: "Open",
+    },
   },
   { timestamps: true },
 );

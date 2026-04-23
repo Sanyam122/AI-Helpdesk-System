@@ -1,0 +1,30 @@
+{
+  "dependencies": {
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^17.4.2",
+    "ejs-mate": "^4.0.0",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "method-override": "^3.0.0",
+    "mongoose": "^9.5.0",
+    "node-cron": "^4.2.1"
+  },
+  "name": "deloitee-project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sanyam122/AI-Helpdesk-System.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Sanyam122/AI-Helpdesk-System/issues"
+  },
+  "homepage": "https://github.com/Sanyam122/AI-Helpdesk-System#readme"
+}

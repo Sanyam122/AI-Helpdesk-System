@@ -22,6 +22,8 @@ const Ticket = require("./Models/tickets.models");
 const User = require("./Models/user");
 const jwt = require("jsonwebtoken");
 
+const updateStatus = require("./cron/ticketcron");
+
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.engine("ejs", ejsMate);
@@ -61,6 +63,7 @@ app.post("/api/chat", async (req, res) => {
 });
 
 connectToDB();
+updateStatus();
 
 app.listen(8080, () => {
   console.log("Server running on port 3000");
