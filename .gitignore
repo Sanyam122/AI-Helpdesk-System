@@ -1,5 +1,5 @@
 .env
-
+.nodemodules/
 .vscode/
 *.log
 .DS_Store

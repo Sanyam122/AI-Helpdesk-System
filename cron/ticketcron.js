@@ -7,6 +7,8 @@ const updateStatus = () =>{
         const twoHour = 2 * 60 * 60 * 1000;
         const fourHour = 4 * 60 * 60 * 1000;
 
+        const now = new Date();
+
         const past2h = new Date(Date.now() - twoHour);
         const past4h = new Date(now.getTime() - fourHour);
 

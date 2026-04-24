@@ -41,8 +41,9 @@ app.use(middlewares.userIdentification);
 app.use("/helpdesk/auth", authRouter);
 app.use("/api/graph", graphRouter);
 app.use("/api/tickets", ticketRoutes);
+app.use("/" , ticketRoutes);
 app.post("/api/chat", async (req, res) => {
-  try {
+  
     const response = await fetch(
       "https://openrouter.ai/api/v1/chat/completions",
       {
@@ -57,10 +58,8 @@ app.post("/api/chat", async (req, res) => {
 
     const data = await response.json();
     res.json(data);
-  } catch (err) {
-    res.status(500).json({ error: "Server error" });
-  }
-});
+  } 
+);
 
 connectToDB();
 updateStatus();
@@ -76,76 +75,6 @@ app.use((req, res, next) => {
 });
 
 // Pages
-
-app.get("/helpdesk/newTicket", (req, res) => {
-  res.render("create");
-});
-
-app.post("/helpdesk/dashboard", async (req, res) => {
-  const { title, category, priority, description } = req.body;
-
-  await Ticket.create({
-    title,
-    category,
-    priority,
-    description,
-    createdBy: req.user._id,
-  });
-
-  await User.findByIdAndUpdate(
-    req.user._id,
-    { $inc: { count: 1 } },
-    { new: true },
-  );
-
-  res.redirect("/helpdesk/dashboard");
-});
-
-app.get("/helpdesk/dashboard", async (req, res) => {
-  if (!req.user) return res.status(401).json({ message: "User not found" });
-
-  const tickets = await Ticket.find({ createdBy: req.user._id });
-  res.render("dashboard", { tickets, user: req.user });
-});
-
-app.get("/helpdesk/ticket/:id/edit", async (req, res) => {
-  const ticket = await Ticket.findById(req.params.id);
-  if (!ticket) return res.status(404).json({ message: "Ticket not found" });
-
-  res.render("edit", { ticket });
-});
-
-app.patch("/helpdesk/dashboard/:id/edit", async (req, res) => {
-  const { title, category, priority, description } = req.body;
-
-  const updatedTicket = await Ticket.findOneAndUpdate(
-    { _id: req.params.id },
-    { title, category, priority, description },
-    { new: true, runValidators: true },
-  );
-
-  if (!updatedTicket)
-    return res.status(404).json({ message: "Ticket not found" });
-
-  res.redirect("/helpdesk/dashboard");
-});
-
-app.delete("/helpdesk/dashboard/:id/delete", async (req, res) => {
-  const ticket = await Ticket.findOneAndDelete({
-    _id: req.params.id,
-    createdBy: req.user._id,
-  });
-
-  if (!ticket) return res.status(404).json({ message: "Ticket not found" });
-
-  await User.updateOne(
-    { _id: req.user._id, count: { $gt: 0 } },
-    { $inc: { count: -1 } },
-  );
-
-  res.redirect("/helpdesk/dashboard");
-});
-
 app.get("/", (req, res) => res.send("Hi this is home page"));
 app.get("/home", (req, res) => res.render("Home"));
 app.get("/login", (req, res) => res.render("login"));

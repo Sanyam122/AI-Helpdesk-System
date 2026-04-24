@@ -1,6 +1,75 @@
 const Ticket = require("../Models/tickets.models");
 
-const getTicketsLast7Days = async (req, res) => {
+ exports.getNewTicket = (req, res) => {
+  res.render("create");
+};
+
+exports.createTicket = async (req, res) => {
+  const { title, category, priority, description } = req.body;
+
+  await Ticket.create({
+    title,
+    category,
+    priority,
+    description,
+    createdBy: req.user._id,
+  });
+
+  await User.findByIdAndUpdate(
+    req.user._id,
+    { $inc: { count: 1 } },
+    { new: true },
+  );
+
+  res.redirect("/helpdesk/dashboard");
+};
+
+exports.getTickets = async (req, res) => {
+  if (!req.user) return res.status(401).json({ message: "User not found" });
+
+  const tickets = await Ticket.find({ createdBy: req.user._id });
+  res.render("dashboard", { tickets, user: req.user });
+};
+
+exports.editTicket = async (req, res) => {
+  const ticket = await Ticket.findById(req.params.id);
+  if (!ticket) return res.status(404).json({ message: "Ticket not found" });
+
+  res.render("edit", { ticket });
+};
+
+exports.updateTicket = async (req, res) => {
+  const { title, category, priority, description } = req.body;
+
+  const updatedTicket = await Ticket.findOneAndUpdate(
+    { _id: req.params.id },
+    { title, category, priority, description },
+    { new: true, runValidators: true },
+  );
+
+  if (!updatedTicket)
+    return res.status(404).json({ message: "Ticket not found" });
+
+  res.redirect("/helpdesk/dashboard");
+};
+
+exports.destroyTicket = async (req, res) => {
+  const ticket = await Ticket.findOneAndDelete({
+    _id: req.params.id,
+    createdBy: req.user._id,
+  });
+
+  if (!ticket) return res.status(404).json({ message: "Ticket not found" });
+
+  await User.updateOne(
+    { _id: req.user._id, count: { $gt: 0 } },
+    { $inc: { count: -1 } },
+  );
+
+  res.redirect("/helpdesk/dashboard");
+};
+
+ exports.getTicketsLast7Days = async (req, res) => {
   try {
     const now = new Date();
     const startDate = new Date();
@@ -43,4 +112,4 @@ const getTicketsLast7Days = async (req, res) => {
   }
 };
 
-module.exports = { getTicketsLast7Days };
+
