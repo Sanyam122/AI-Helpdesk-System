@@ -1,160 +1,200 @@
-/* Light */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+a{
+  text-decoration: none !important;
+}
+
+/* font*/
 @font-face {
   font-family: "Delight";
   src: url("../delight-font-family/delight-light.otf");
   font-weight: 300;
 }
-
-/* Regular */
 @font-face {
   font-family: "Delight";
   src: url("../delight-font-family/delight-regular.otf");
   font-weight: 400;
 }
-
-/* Medium */
 @font-face {
   font-family: "Delight";
   src: url("../delight-font-family/delight-medium.otf");
   font-weight: 500;
 }
-
-/* Semibold */
 @font-face {
   font-family: "Delight";
   src: url("../delight-font-family/delight-semibold.otf");
   font-weight: 600;
 }
-
-/* Bold */
 @font-face {
   font-family: "Delight";
   src: url("../delight-font-family/delight-bold.otf");
   font-weight: 700;
 }
 
-* {
-  font-family: "Delight", sans-serif;
-  padding: 0.1rem;
-  overflow-x: hidden;
-}
 body {
-  width: 100vw !important;
+  font-family: "Delight", sans-serif;
+  background-color: #f9f9f9;
+  width: 100%;
 }
 
 a {
-  text-decoration: none !important;
-  cursor: pointer !important;
+  text-decoration: none;
+  cursor: pointer;
+  color: inherit;
 }
 
-/* Navigation Bar */
-.myborder2 {
-  border: 2px solid white;
-}
-.myborder {
-  border: 3px solid black;
-}
+/* navbar*/
 nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.5rem;
-  margin-top: 1rem;
-  width: 90%;
-  place-items: center;
+  padding: 10px 20px;
+  margin-top: 10px;
+  height: 64px;
+  background: #fff;
 }
+
 .weblogo {
   height: 40px;
   width: 40px;
   border-radius: 24%;
 }
 
-.logo {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-}
-.features {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-}
+.logo,
+.features,
 .login-section {
   display: flex;
-  justify-content: center;
   align-items: center;
   gap: 1rem;
 }
 
-/* Dashboard Page  */
-.dashboard-container {
-  min-height: 100vh;
-}
-nav {
-  height: 64px;
-  width: auto;
-  overflow-y: hidden;
-}
 .online {
   background-color: #75ffca;
-  font-size: x-small;
   color: #008a55;
+  font-size: 10px;
+  padding: 4px 10px;
 }
+
+/* dashboard */
+.dashboard-container {
+  height: 91.5vh !important;
+}
+
+/*sidebar */
+aside {
+  background: #fff;
+}
+
+aside ul {
+  list-style: none;
+}
+
+aside li {
+  margin-bottom: 10px;
+  border-radius: 10px;
+  transition: 0.2s;
+}
+
+aside a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  color: #333;
+  border-radius: 10px;
+  transition: 0.2s;
+  font-weight: 500;
+}
+
+aside a:hover {
+  background: #eef3ff;
+  color: #2563eb;
+}
+
+aside svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+/* Active Sidebar */
+.active-item {
+  background: #eaf0ff;
+}
+
+.active-item a {
+  color: #2563eb;
+}
+
+/* main*/
 main {
   background-color: #f9f9f9;
+  padding: 15px;
 }
 
-main .add-buttons {
+.add-buttons {
   display: flex;
-  justify-content: flex-start;
-  margin: auto;
-  gap: 0.5rem;
   align-items: center;
-}
-.ai-bar {
-  background-color: #f9f9f9;
-}
-/*Sidebar*/
-aside {
-  svg {
-    height: 1.5rem;
-    width: 1.5rem;
-  }
-  a {
-    display: flex;
-    align-items: center;
-    color: black !important;
-  }
-  li {
-    height: fit-content;
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-    cursor: pointer;
-  }
+  gap: 10px;
 }
 
-li::-webkit-scrollbar {
-  display: none;
-}
-
-.logout {
-  height: 80vh;
+/*cards */
+.card {
+  border-radius: 12px;
+  border: 1px solid #eee;
 }
 
 .card .badge {
   width: fit-content;
 }
 
+/* ai bar */
+.ai-bar {
+  background-color: #f9f9f9;
+}
+
+.quickCreate {
+  width: 90%;
+}
+
+/* tickets */
 .tickets-section .card {
   max-width: 600px;
   width: 100%;
 }
 
+/* mobile layout */
 .shortcut-for-small {
   width: 90%;
-  svg {
-    height: 1.5rem;
-    width: 1.5rem;
+}
+
+.shortcut-for-small svg {
+  width: 20px;
+  height: 20px;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 10px;
+}
+
+@media (max-width: 768px) {
+  aside {
+    display: none;
+  }
+
+  .ai-bar {
+    display: none;
+  }
+
+  nav {
+    padding: 10px;
   }
 }

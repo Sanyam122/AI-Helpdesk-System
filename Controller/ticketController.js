@@ -112,4 +112,27 @@ exports.destroyTicket = async (req, res) => {
   }
 };
 
+exports.getTicketsAPI = async (req, res) => {
+  if (!req.user) return res.status(401).json({ message: "User not found" });
+
+  const page = parseInt(req.query.page) || 1;
+  const limit = 2;
+
+  const skip = (page - 1) * limit;
+
+  const totalTickets = await Ticket.countDocuments({
+    createdBy: req.user._id,
+  });
+
+  const tickets = await Ticket.find({ createdBy: req.user._id })
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(limit);
+
+  res.json({
+    tickets,
+    currentPage: page,
+    totalPages: Math.ceil(totalTickets / limit),
+  });
+};
 

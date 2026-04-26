@@ -16,6 +16,6 @@ router.route("/helpdesk/ticket/:id/edit")
 .patch(ticketController.updateTicket)
 .delete(ticketController.destroyTicket);
 
-
+router.get("/api/dashboard", ticketController.getTicketsAPI);
 
 module.exports = router;
