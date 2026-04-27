@@ -1,41 +1,7 @@
 <% layout("/layouts/boilerplate") %>
 
-<style>
-  .quickCreate {
-    width: 90%;
-  }
-</style>
-
 <!-- Navbar -->
-<nav class="d-flex align-items-center gap-3 px-3 w-100">
-  <a class="navbar-brand d-flex align-items-center" href="/home">
-    <img src="/logo/logo.png" width="40" height="40" class="rounded-circle" />
-    <b class="ms-2">Agentic AI</b>
-  </a>
-
-  <div class="list-items d-none d-lg-flex align-items-center">
-    <span class="fw-bold fs-5 ms-4">Active Queue</span>
-    <div class="online rounded-4 p-1 ms-3">
-      <b>ONLINE & RECEIVING</b>
-    </div>
-  </div>
-
-  <div class="search ms-auto">
-    <form class="d-none d-sm-flex" style="max-width: 300px">
-      <input class="form-control" type="search" placeholder="Quick Search" />
-    </form>
-  </div>
-
-  <div class="card border-0 rounded-4 p-2 ms-3">
-    <div class="d-flex align-items-center">
-      <div class="fs-6 me-2 d-none d-md-block">
-        <h6 class="mb-0 fw-semibold"><%= user.username %></h6>
-        <small class="text-muted">Project Manager</small>
-      </div>
-      <img src="/images/photo2.png" class="rounded-circle" width="45" height="45" />
-    </div>
-  </div>
-</nav>
+<%- include("layouts/navbar.ejs") %>
 
 <!-- MAIN LAYOUT -->
 <div class="container-fluid">
@@ -45,7 +11,7 @@
     <%- include("layouts/sidebar") %>
 
     <!-- MAIN -->
-    <main class="col-lg-7 col-md-7 col-12">
+    <main class="col-lg-7 col-md-7 col-12 ">
       <div class="container-fluid">
 
         <div class="add-buttons mt-2">
@@ -62,7 +28,9 @@
     </main>
 
     <!-- RIGHT PANEL -->
-    <div class="ai-bar col-lg-3 col-md-4 d-none d-md-block p-0">
+    <div class="ai-bar col-lg-3 col-md-4 d-none d-md-block p-3 ">
+
+      <!-- QUICK CREATE -->
       <div class="quickCreate container p-4 shadow mt-2 me-5 rounded-4 bg-white">
         
         <div class="d-flex align-items-center gap-2 mb-2">
@@ -81,29 +49,94 @@
         </form>
 
       </div>
+      <div class="container mt-3 me-4">
+        <iframe 
+          src="/Chatbot/helpdeskChatbot.html"
+          style="width: 100%; height: 450px; border: none; border-radius: 16px;">
+        </iframe>
+      </div>
+
     </div>
 
   </div>
 </div>
 
-<!-- CHATBOT -->
-<iframe src="/Chatbot/helpdeskChatbot.html"
-  style="position: fixed; bottom: 20px; right: 20px; width: 380px; height: 600px; border: none;">
-</iframe>
-
-<!-- SCRIPT -->
 <script>
+function getPriorityDotClass(priority) {
+  const p = (priority || "").toLowerCase();
+  if (p === "high")   return "dot-high";
+  if (p === "medium") return "dot-medium";
+  return "dot-low";
+}
+
+function getPriorityBadgeClass(priority) {
+  const p = (priority || "").toLowerCase();
+  if (p === "high")   return "badge-high";
+  if (p === "medium") return "badge-medium";
+  return "badge-low";
+}
+
+function formatDate(dateStr) {
+  if (!dateStr) return "";
+  const d = new Date(dateStr);
+  return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+}
+
+function renderTicketCard(t) {
+  const priority   = t.priority || "low";
+  const dotClass   = getPriorityDotClass(priority);
+  const badgeClass = getPriorityBadgeClass(priority);
+  const idStr      = t._id ? String(t._id).slice(-5).toUpperCase() : "00000";
+  const dueDate    = t.dueDate ? formatDate(t.dueDate) : "";
+  const category   = t.category || "";
+
+  return `
+    <div class="ticket-card" onclick="window.location='/tickets/${t._id}'">
+      <div class="ticket-aside">
+        <div class="ticket-aside-dot ${dotClass}"></div>
+        <div class="ticket-aside-num">${idStr}</div>
+      </div>
+
+      <div class="ticket-main">
+        <div class="ticket-top">
+          <div class="ticket-title">${t.title || "Untitled"}</div>
+          <div class="ticket-desc">${t.description || ""}</div>
+        </div>
+        <div class="ticket-tags">
+          ${category ? `<span class="ticket-tag">${category}</span>` : ""}
+          ${t.status  ? `<span class="ticket-tag">${t.status}</span>` : ""}
+        </div>
+      </div>
+
+      <div class="ticket-right">
+        <span class="ticket-priority-badge ${badgeClass}">${priority}</span>
+        <div class="ticket-right-bottom">
+          ${dueDate ? `
+          <div class="ticket-due">
+            <svg viewBox="0 0 12 12" fill="none">
+              <circle cx="6" cy="6" r="4.5" stroke="#7a8db5" stroke-width="1.2"/>
+              <path d="M6 3.5V6.5l1.5 1" stroke="#7a8db5" stroke-width="1.2"/>
+            </svg>
+            ${dueDate}
+          </div>` : ""}
+          <div class="ticket-status">
+            <div class="status-dot"></div>
+            <span class="status-label">Open</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
 async function loadTickets(page = 1) {
   const res = await fetch(`/api/dashboard?page=${page}`);
   const data = await res.json();
 
-  document.getElementById("tickets-container").innerHTML =
-    data.tickets.map(t => `
-      <div class="card p-3 mb-2">
-        <b>${t.title}</b>
-        <p>${t.description}</p>
-      </div>
-    `).join("");
+  const container = document.getElementById("tickets-container");
+  container.innerHTML = data.tickets.length
+    ? data.tickets.map(renderTicketCard).join("")
+    : `<p style="color:#7a8db5;font-size:13px;padding:1rem 0;">No tickets found.</p>`;
 
   const p = document.getElementById("pagination");
   p.innerHTML = "";

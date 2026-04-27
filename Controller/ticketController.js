@@ -1,4 +1,5 @@
 const Ticket = require("../Models/tickets.models");
+const User = require("../Models/user");
 
  exports.getNewTicket = (req, res) => {
   res.render("create");
