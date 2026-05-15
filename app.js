@@ -71,6 +71,7 @@ app.post("/api/chat", async (req, res) => {
 app.get("/home", (req, res) => res.render("Home"));
 app.get("/login", (req, res) => res.render("login"));
 app.get("/signin", (req, res) => res.render("signin"));
+app.get("/helpdesk/actionCenter" , (req,res) => res.render("actionCenter"));
 app.get("/helpdesk/dashboard", ticketController.getTickets);
 app.get("/helpdesk/newTicket", ticketController.getNewTicket);
 app.post("/helpdesk/dashboard", ticketController.createTicket); 

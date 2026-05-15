@@ -45,7 +45,7 @@
      <%- include("layouts/sidebar") %>
 
     <!-- MAIN CONTENT -->
-    <main class="col-lg-10 col-md-11 col-12 px-4 h-100">
+    <main class="col-lg-10 col-md-11 col-12 px-4 ">
 
       <!-- HEADER -->
       <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap">
@@ -56,7 +56,7 @@
           </p>
         </div>
 
-        <button class="btn btn-primary shadow-2 mt-2 mt-md-0 d-sm-none">
+        <button class="btn btn-primary shadow-2 mt-2 mt-md-0 d-none d-md-block ">
           Create New Ticket
         </button>
       </div>
@@ -64,7 +64,7 @@
       <!-- CARDS -->
       <div class="row g-3  mt-2">
 
-        <div class="col-md-4">
+        <div class="col-md-4 d-none d-md-block">
           <div class="progressCard shadow-2 d-flex align-items-center rounded-4 p-3">
             <div class="progressCardImg p-3 rounded-4 me-3 d-none d-sm-block">
               <i class="fa-solid fa-ticket text-primary fs-3"></i>
@@ -76,7 +76,7 @@
           </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-4 d-none d-md-block">
           <div class="progressCard shadow-2 d-flex align-items-center rounded-4 p-3">
             <div class="progressCardImg p-3 rounded-4 me-3 d-none d-sm-block" style="background:#fed7aa">
               <i class="fa-solid fa-spinner text-warning fs-3"></i>
@@ -104,8 +104,8 @@
 
       <!-- TABLE -->
       <div class="container my-4">
-        <div class="table-responsive shadow rounded-4">
-          <table class="table align-middle mb-0">
+        <div class="table-responsive shadow rounded-4 ">
+          <table class="table align-middle mb-0 ">
 
             <thead class="table-light">
               <tr>
