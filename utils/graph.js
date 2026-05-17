@@ -5,7 +5,6 @@ const getTicketsLast7Days = async (req, res) => {
     const today = new Date();
     const last7Days = [];
 
-    // Generate last 7 days (including today)
     for (let i = 6; i >= 0; i--) {
       const d = new Date();
       d.setDate(today.getDate() - i);
@@ -16,9 +15,8 @@ const getTicketsLast7Days = async (req, res) => {
     const tickets = await Ticket.aggregate([
       {
         $match: {
-          createdAt: {
-            $gte: last7Days[0],
-          },
+          createdAt: { $gte: last7Days[0] },
+          createdBy: req.user._id,   
         },
       },
       {
@@ -31,21 +29,17 @@ const getTicketsLast7Days = async (req, res) => {
       },
     ]);
 
-    // Convert aggregation → map
     const map = {};
     tickets.forEach((t) => {
       map[t._id] = t.count;
     });
 
-    // Build response (fill missing days with 0)
     const labels = [];
     const data = [];
 
     last7Days.forEach((date) => {
       const key = date.toISOString().split("T")[0];
-
       labels.push(date.toLocaleDateString("en-US", { weekday: "short" }));
-
       data.push(map[key] || 0);
     });
 
