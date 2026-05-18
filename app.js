@@ -94,10 +94,14 @@ app.get("/tickets", async (req, res) => {
 });
 
 app.get("/performance", async (req, res) => {
-
-  const tickets = await Ticket.find({user: req.user});
+  const tickets = await Ticket.findById(req.user);
   console.log(tickets);
- return  res.render("performance", { tickets });
+  const resolvedTickets = await Ticket.countDocuments({
+    createdBy : req.user,
+    status: "Resolved",
+  });
+  console.log(resolvedTickets);
+  res.render("performance",{tickets , resolvedTickets})
 });
 
 // DB & cron
