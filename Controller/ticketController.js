@@ -22,6 +22,10 @@ exports.createTicket = async (req, res) => {
     { new: true },
   );
 
+  setTimeout(() =>{
+    createNotification();
+  }, 30*60*1000);
+
   res.redirect("/helpdesk/dashboard");
 };
 
