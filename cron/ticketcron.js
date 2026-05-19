@@ -20,11 +20,11 @@ exports.updateStatus = async function(ticketId) {
                 return;
             }
 
-            if (ticket.approval === "approved" && ticket.status === "open") {
-                ticket.status = "Pending";
+            if (ticket.approval === "approved" && ticket.status === "Open") {
+                ticket.status = "In Progress";
                 await ticket.save();
 
-            } else if (ticket.status === "Pending") {
+            } else if (ticket.status === "In Progress") {
                 ticket.status = "Resolved";
                 await ticket.save();
             }

@@ -71,7 +71,7 @@
             </div>
             <div>
               <small class="text-muted"><b>OPEN TICKETS</b></small>
-              <p class="fs-4 fw-bold"><%= user.count %></p>
+              <p class="fs-4 fw-bold"><%= openTickets %></p>
             </div>
           </div>
         </div>
@@ -83,7 +83,7 @@
             </div>
             <div>
               <small class="text-muted"><b>IN PROGRESS</b></small>
-              <p class="fs-4 fw-bold"><%= Math.max(user.count,0) %></p>
+              <p class="fs-4 fw-bold"><%= pendingTickets %></p>
             </div>
           </div>
         </div>
@@ -95,7 +95,7 @@
             </div>
             <div>
               <small class="text-muted"><b>RESOLVED</b></small>
-              <p class="fs-4 fw-bold">48</p>
+              <p class="fs-4 fw-bold"><%= resolvedTickets %></p>
             </div>
           </div>
         </div>

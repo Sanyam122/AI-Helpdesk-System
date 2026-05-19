@@ -88,20 +88,26 @@ app.get("/helpdesk/ticket/:id", ticketController.editTicket);
 app.get("/helpdesk/newTicket", (req, res) => res.render("create")); 
 
 app.get("/tickets", async (req, res) => {
-  const tickets = await Ticket.find({user: req.user});
-  console.log(tickets);
-  return res.render("Tickets", { tickets });
+  const tickets = await Ticket.find({createdBy: req.user});
+
+  const openTickets = await Ticket.countDocuments({
+    createdBy : req.user,
+    status: "Open",
+  })
+  const resolvedTickets = await Ticket.countDocuments({
+    createdBy: req.user,
+    status : "Resolved"
+  })
+  const pendingTickets = await Ticket.countDocuments({
+    createdBy : req.user,
+    status: "In Progress"
+  })
+  return res.render("Tickets", { tickets , resolvedTickets , pendingTickets, openTickets});
 });
 
 app.get("/performance", async (req, res) => {
-  const tickets = await Ticket.findById(req.user);
-  console.log(tickets);
-  const resolvedTickets = await Ticket.countDocuments({
-    createdBy : req.user,
-    status: "Resolved",
-  });
-  console.log(resolvedTickets);
-  res.render("performance",{tickets , resolvedTickets})
+  const tickets = await Ticket.find({createdBy : req.user})
+  res.render("performance",{tickets})
 });
 
 // DB & cron
