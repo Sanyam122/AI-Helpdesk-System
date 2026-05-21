@@ -23,6 +23,7 @@ const User = require("./Models/user");
 const jwt = require("jsonwebtoken");
 
 const updateStatus = require("./cron/ticketcron");
+const notificationModel = require("./Models/notification.models");
 
 // App config
 app.set("view engine", "ejs");
@@ -50,6 +51,9 @@ app.use("/helpdesk/auth", authRouter);
 app.use("/api/graph", graphRouter);
 app.use("/api/tickets", ticketRoutes);
 
+
+
+
 app.post("/api/chat", async (req, res) => {
   try {
     const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
@@ -71,7 +75,10 @@ app.post("/api/chat", async (req, res) => {
 app.get("/home", (req, res) => res.render("Home"));
 app.get("/login", (req, res) => res.render("login"));
 app.get("/signin", (req, res) => res.render("signin"));
-app.get("/helpdesk/actionCenter" , (req,res) => res.render("actionCenter"));
+app.get("/helpdesk/actionCenter", async (req, res) => {
+    const notifications = await notificationModel.find();
+    res.render("actionCenter", { notifications });
+});
 app.get("/helpdesk/dashboard", ticketController.getTickets);
 app.get("/helpdesk/newTicket", ticketController.getNewTicket);
 app.post("/helpdesk/dashboard", ticketController.createTicket); 

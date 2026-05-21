@@ -1,5 +1,6 @@
 const Ticket = require("../Models/tickets.models");
 const User = require("../Models/user");
+const { createNotification } = require("../Controller/notificationController");
 
  exports.getNewTicket = (req, res) => {
   res.render("create");
@@ -8,7 +9,7 @@ const User = require("../Models/user");
 exports.createTicket = async (req, res) => {
   const { title, category, priority, description } = req.body;
 
-  await Ticket.create({
+  const ticket = await Ticket.create({
     title,
     category,
     priority,
@@ -22,9 +23,7 @@ exports.createTicket = async (req, res) => {
     { new: true },
   );
 
-  setTimeout(() =>{
-    createNotification();
-  }, 30*60*1000);
+    createNotification(ticket._id);
 
   res.redirect("/helpdesk/dashboard");
 };

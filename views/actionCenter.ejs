@@ -28,18 +28,17 @@
  <%- include("layouts/sidebar.ejs") %>
 
  <main class=" col-lg-7 col-md-7 col-12 flex-grow-1">
+   <% for( let notification of notifications) { %>
 
     <div class="card p-3 m-4 rounded-4">
         <div class="card-title m-2"><span><b>DataBase Access Request</b></span></div>
 
         <div  class=" m-2 border-none rounded-4">Rahul Sharma requested access to your DataBase </div>
+        <div class="m-2 fw-500"><%= notification.ticketId.title %></div>
 
-        <div class="time m-2">2h 15min ago</div>
-        
         <div class="accessButtons mt-3 mx-2  gap-3">
            <button class="btn btn-primary">Approve</button>
            <button commandfor="confirmation" command="show-popover" class="btn btn-danger ">Deny</button>
-           <div id="mypopover" popover>Popover content</div>
         </div>
         
         <form method="get" action="/helpdesk/actionCenter" >
@@ -50,5 +49,6 @@
         </form>
 
     </div>
+    <% } %>
  </main>
 </div>
