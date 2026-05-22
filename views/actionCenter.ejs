@@ -1,3 +1,7 @@
+<script>
+   const approveNotification = require("../Controller/ticketController.js");
+</script>
+
 <style>
    .actionCenter{
     height: 92.2vh;
@@ -37,7 +41,7 @@
         <div class="m-2 fw-500"><%= notification.ticketId.title %></div>
 
         <div class="accessButtons mt-3 mx-2  gap-3">
-           <button class="btn btn-primary">Approve</button>
+           <button class="btn btn-primary" type="submit" onclick="approveNotification()">Approve</button>
            <button commandfor="confirmation" command="show-popover" class="btn btn-danger ">Deny</button>
         </div>
         

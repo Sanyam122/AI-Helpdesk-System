@@ -1,5 +1,7 @@
 const notificationModel = require("../Models/notification.models");
 const Ticket = require("../Models/tickets.models");
+const router = require("express").Router();
+
 
 exports.createNotification = async function (ticketId) {
     const notifications = await notificationModel.create({
@@ -9,7 +11,6 @@ exports.createNotification = async function (ticketId) {
         ticketId,
     });
 
-    console.log({notifications})
     setTimeout(async () => {
         const currentNotification = await notificationModel.findById(notification._id);
 
@@ -22,14 +23,9 @@ exports.createNotification = async function (ticketId) {
     }, 2 * 60 * 60 * 1000);
 };
 
-exports.getActionCenter = async function (req, res) {
-    try {
-        const notifications = await notificationModel.find().populate("ticketId");
-        console.log({notifications});
-        res.render("actionCenter", { notifications });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
+exports.getActionCenter = async function (req, res, ticketId) {
+   
+    res.render("actionCenter")
 };
 
 exports.approveNotification = async function (req, res) {
@@ -41,8 +37,12 @@ exports.approveNotification = async function (req, res) {
         notification.status = "Approved";
         await notification.save();
 
+        console.log("Notification is approved");
+
         return res.status(200).json({ message: "Notification approved", notification });
     } catch (err) {
         return res.status(500).json({ error: err.message });
     }
 };
+
+router.post("/approve",approveNotification);
