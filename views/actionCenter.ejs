@@ -1,6 +1,4 @@
-<script>
-   const approveNotification = require("../Controller/ticketController.js");
-</script>
+
 
 <style>
    .actionCenter{
@@ -38,16 +36,20 @@
         <div class="card-title m-2"><span><b>DataBase Access Request</b></span></div>
 
         <div  class=" m-2 border-none rounded-4">Rahul Sharma requested access to your DataBase </div>
-        <div class="m-2 fw-500"><%= notification.ticketId.title %></div>
+        <div class="m-2 fw-500"><%= notification.ticketId %></div>
 
         <div class="accessButtons mt-3 mx-2  gap-3">
-           <button class="btn btn-primary" type="submit" onclick="approveNotification()">Approve</button>
-           <button commandfor="confirmation" command="show-popover" class="btn btn-danger ">Deny</button>
+         <form method="post" action="approve/<%= notification._id %>">
+            <input type="hidden" name="action" value="Approved">
+           <button class="btn btn-primary" type="submit" data-action="Approved">Approve</button>
+           </form>
+           <button commandfor="confirmation" command="show-popover" class="btn btn-danger" data-action="Denied">Deny</button>
         </div>
         
-        <form method="get" action="/helpdesk/actionCenter" >
+        <form method="post" action="approve/<%= notification._id %>" >
          <div  id="confirmation" popover class="position-relative rounded-4 p-3">
             <p>Are you sure do you want to deny ?</p>
+            <input type="hidden" name="action" value="Denied">
             <button class="btn btn-danger mt-3" type="submit">OK</button>
          </div>
         </form>

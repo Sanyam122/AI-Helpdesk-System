@@ -24,6 +24,7 @@ const jwt = require("jsonwebtoken");
 
 const updateStatus = require("./cron/ticketcron");
 const notificationModel = require("./Models/notification.models");
+const notificationRouter = require("./routes/notifications.route");
 
 // App config
 app.set("view engine", "ejs");
@@ -50,6 +51,7 @@ app.use((req, res, next) => {
 app.use("/helpdesk/auth", authRouter);
 app.use("/api/graph", graphRouter);
 app.use("/api/tickets", ticketRoutes);
+app.use("/helpdesk", notificationRouter);
 
 
 
@@ -85,14 +87,14 @@ app.post("/helpdesk/dashboard", ticketController.createTicket);
 app.get("/helpdesk/ticket/:id", ticketController.editTicket);
 app.get("/helpdesk/newTicket", (req, res) => res.render("create"));    
 app.get("/tickets", async (req, res) => {
-  const tickets = await Ticket.find();
+  const tickets = await Ticket.find({user: req.user});
   res.render("Tickets", { tickets });
 });
 
 app.get("/performance", async (req, res) => {
-  const tickets = await Ticket.find();
-  const user = await User.findById(req.user._id);
-  res.render("performance", { tickets, user });
+  const tickets = await Ticket.find({user: req.user});
+ 
+ return  res.render("performance", { tickets });
 });
 
 // DB & cron

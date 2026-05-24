@@ -31,8 +31,10 @@ exports.createTicket = async (req, res) => {
 exports.getTickets = async (req, res) => {
   if (!req.user) return res.status(401).json({ message: "User not found" });
 
-  const tickets = await Ticket.find({ createdBy: req.user._id });
+  const tickets = await Ticket.find({ createdBy: req.user });
+
   res.render("dashboard", { tickets, user: req.user });
+  
 };
 
 exports.editTicket = async (req, res) => {
