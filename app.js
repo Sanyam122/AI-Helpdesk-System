@@ -85,15 +85,18 @@ app.get("/helpdesk/dashboard", ticketController.getTickets);
 app.get("/helpdesk/newTicket", ticketController.getNewTicket);
 app.post("/helpdesk/dashboard", ticketController.createTicket); 
 app.get("/helpdesk/ticket/:id", ticketController.editTicket);
-app.get("/helpdesk/newTicket", (req, res) => res.render("create"));    
+app.get("/helpdesk/newTicket", (req, res) => res.render("create")); 
+
 app.get("/tickets", async (req, res) => {
   const tickets = await Ticket.find({user: req.user});
-  res.render("Tickets", { tickets });
+  console.log(tickets);
+  return res.render("Tickets", { tickets });
 });
 
 app.get("/performance", async (req, res) => {
+
   const tickets = await Ticket.find({user: req.user});
- 
+  console.log(tickets);
  return  res.render("performance", { tickets });
 });
 
