@@ -25,6 +25,7 @@ const jwt = require("jsonwebtoken");
 const updateStatus = require("./cron/ticketcron");
 const notificationModel = require("./Models/notification.models");
 const notificationRouter = require("./routes/notifications.route");
+const pageRouter = require("./routes/page.route");
 
 // App config
 app.set("view engine", "ejs");
@@ -74,41 +75,19 @@ app.post("/api/chat", async (req, res) => {
 });
 
 // Page routes
-app.get("/home", (req, res) => res.render("Home"));
-app.get("/login", (req, res) => res.render("login"));
-app.get("/signin", (req, res) => res.render("signin"));
-app.get("/helpdesk/actionCenter", async (req, res) => {
-    const notifications = await notificationModel.find();
-    res.render("actionCenter", { notifications });
-});
+app.get("/home", pageRouter.toHome);
+app.get("/login",pageRouter.toLogin);
+app.get("/signin", pageRouter.toSignIn);
+app.get("/helpdesk/actionCenter", pageRouter.toActionCenter);
 app.get("/helpdesk/dashboard", ticketController.getTickets);
 app.get("/helpdesk/newTicket", ticketController.getNewTicket);
 app.post("/helpdesk/dashboard", ticketController.createTicket); 
 app.get("/helpdesk/ticket/:id", ticketController.editTicket);
-app.get("/helpdesk/newTicket", (req, res) => res.render("create")); 
+app.get("/helpdesk/newTicket", ); 
 
-app.get("/tickets", async (req, res) => {
-  const tickets = await Ticket.find({createdBy: req.user});
+app.get("/tickets", pageRouter.toTickets);
 
-  const openTickets = await Ticket.countDocuments({
-    createdBy : req.user,
-    status: "Open",
-  })
-  const resolvedTickets = await Ticket.countDocuments({
-    createdBy: req.user,
-    status : "Resolved"
-  })
-  const pendingTickets = await Ticket.countDocuments({
-    createdBy : req.user,
-    status: "In Progress"
-  })
-  return res.render("Tickets", { tickets , resolvedTickets , pendingTickets, openTickets});
-});
-
-app.get("/performance", async (req, res) => {
-  const tickets = await Ticket.find({createdBy : req.user})
-  res.render("performance",{tickets})
-});
+app.get("/performance", pageRouter.toPerformance);
 
 // DB & cron
 connectToDB();
