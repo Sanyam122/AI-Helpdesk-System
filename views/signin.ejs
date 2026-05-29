@@ -1,7 +1,10 @@
 <% layout("/layouts/boilerplate") %>
+
 <style>
   .login-page {
     min-height: 100vh;
+    width: 100%;
+    margin: 0;
     background: #261fa3;
     background: radial-gradient(
       circle,
@@ -9,65 +12,53 @@
       rgba(19, 127, 236, 1) 45%,
       rgba(0, 212, 255, 1) 100%
     );
-    margin: 0 !important;
-    position: absolute;
   }
 
   .login-box {
     background-color: #ffffff;
-    label {
-      font-weight: 500;
-    }
+  }
 
-    .btn-grad {
-      background-image: linear-gradient(
-        to right,
-        #1fa2ff 0%,
-        #12d8fa 51%,
-        #1fa2ff 100%
-      );
-    }
+  .login-box label {
+    font-weight: 500;
+  }
 
-    .btn-grad {
-      padding: 15px 45px;
-      text-align: center;
-      text-transform: uppercase;
-      transition: 0.5s;
-      background-size: 200% auto;
-      color: white;
-      box-shadow: 0 0 20px #eee;
-      border-radius: 10px;
-      display: block;
-      outline: none;
-      border: none;
-    }
+  .btn-grad {
+    padding: 15px 45px;
+    text-align: center;
+    text-transform: uppercase;
+    transition: 0.5s;
+    background-size: 200% auto;
+    background-image: linear-gradient(
+      to right,
+      #1fa2ff 0%,
+      #12d8fa 51%,
+      #1fa2ff 100%
+    ) !important;
+    background-color: transparent !important;
+    color: white;
+    box-shadow: 0 0 20px #eee;
+    border-radius: 10px;
+    display: block;
+    outline: none;
+    border: none;
+  }
 
-    .btn-grad:hover {
-      background-position: right center;
-      color: #fff;
-      text-decoration: none;
-    }
+  .btn-grad:hover {
+    background-position: right center;
+    color: #fff;
+    text-decoration: none;
   }
 </style>
-<body class="login-page row d-flex justify-content-center align-items-center">
+
+<div class="login-page row d-flex justify-content-center align-items-center" style="margin: 0 !important; overflow-x: hidden;">
   <div class="nav ms-3 d-flex justify-content-between align-items-center">
     <div class="heading">
       <img src="/logo/logo.png" class="weblogo" />
-      <a href="/home" style="color: white; font-weight: 700" class="fs-3"
-        >Agnetic AI</a
-      >
+      <a href="/home" style="color: white; font-weight: 700" class="fs-3">Agnetic AI</a>
     </div>
     <div class="documentation d-flex justify-content-evenly">
-      <b
-        ><a href="" class="ms-auto d-none d-md-block" style="color: white"
-          >Documentation</a
-        ></b
-      >
-      <b
-        ><a href="" class="mx-4 d-none d-md-block" style="color: white"
-          >Support</a
-        ></b
-      >
+      <b><a href="" class="ms-auto d-none d-md-block" style="color: white">Documentation</a></b>
+      <b><a href="" class="mx-4 d-none d-md-block" style="color: white">Support</a></b>
     </div>
   </div>
 
@@ -78,14 +69,12 @@
       </blockquote>
       <p class="text-muted blockquote-footer">AI powered Helpdesk System</p>
     </figure>
+
     <!--------- Form --------->
-    <form
-      action="/helpdesk/auth/register"
-      class="form mt-3 p-md-3 p-2"
-      method="post"
-    >
+    <form action="/helpdesk/auth/register" class="form mt-3 p-md-3 p-2" method="post">
+
       <!-- Name -->
-      <label for="name" class="form-label"> Name</label>
+      <label for="name" class="form-label">Name</label>
       <input
         type="text"
         placeholder=" Enter your name"
@@ -93,68 +82,62 @@
         class="form-control mb-3"
         name="username"
       />
+
       <!-------- Email ----------->
-      <label for="work-email" class="form-label"> Work Email</label>
+      <label for="work-email" class="form-label">Work Email</label>
       <input
         type="email"
-        placeholder=" &#9993;    Enter your work email"
+        placeholder=" ✉ Enter your work email"
         id="work-email"
         class="form-control"
         name="email"
       />
+
       <!-------- Password ---------->
-      <label class="form-label mt-3">Password</label>
+      <label for="password" class="form-label mt-3">Password</label>
       <input
         type="password"
+        id="password"
         class="form-control"
         name="password"
-        placeholder="&#128274; &#9679; &#9679; &#9679; &#9679; &#9679; &#9679; &#9679; &#9679; &#9679;"
+        placeholder="🔒 ● ● ● ● ● ● ● ● ●"
       />
+
       <!-- Remember my choice -->
       <div class="form-check mt-3">
-        <input class="form-check-input" type="checkbox" />
-        <label class="form-check-label"> Remember my choice </label>
+        <input class="form-check-input" type="checkbox" id="remember" />
+        <label class="form-check-label" for="remember">Remember my choice</label>
       </div>
-      <!-- Sign In -->
-      <button class="btn-lg btn-grad w-100 mt-3" type="submit">
-        <small
-          >Sign In
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 20 20"
-            class="m-1"
-          >
+
+      <!-- Sign Up -->
+      <button class="btn-grad w-100 mt-3" type="submit">
+        <small>
+          Sign Up
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" class="m-1">
             <path fill="#ffffff" d="m0 0l20 10L0 20V0zm0 8v4l10-2L0 8z" />
           </svg>
         </small>
       </button>
-      <br />
-      <!-- Sign Up with Google  -->
-      <div class="d-flex align-items-center my-3">
-        <hr class="flex-grow-1" />
-        <span class="mx-2 text-muted">OR SIGN IN WITH </span>
-        <hr class="flex-grow-1" />
-      </div>
     </form>
+
+    <!-- OR divider (outside form) -->
+    <div class="d-flex align-items-center my-3 px-3">
+      <hr class="flex-grow-1" />
+      <span class="mx-2 text-muted">OR SIGN UP WITH</span>
+      <hr class="flex-grow-1" />
+    </div>
+
     <!-- Need help -->
-    <div class="need-help text-center">
-      <small class="text-muted"
-        >New to helpdesk?<a href="">Request access</a></small
-      >
+    <div class="need-help text-center mb-3">
+      <small class="text-muted">Already have an account? <a href="/helpdesk/auth/login">Sign in</a></small>
     </div>
   </div>
-  <div class="privacy text-center">
+
+  <div class="privacy text-center mt-3">
     <p class="fs-6">
-      <a href="" style="color: white; opacity: 0.7; margin-left: 1rem"
-        >Privacy Policy</a
-      ><a href="" style="color: white; opacity: 0.7; margin-left: 1rem"
-        >Terms of Service</a
-      >
-      <a href="" style="color: white; opacity: 0.7; margin-left: 1rem"
-        >Help Center</a
-      >
+      <a href="" style="color: white; opacity: 0.7; margin-left: 1rem">Privacy Policy</a>
+      <a href="" style="color: white; opacity: 0.7; margin-left: 1rem">Terms of Service</a>
+      <a href="" style="color: white; opacity: 0.7; margin-left: 1rem">Help Center</a>
     </p>
   </div>
-</body>
+</div>

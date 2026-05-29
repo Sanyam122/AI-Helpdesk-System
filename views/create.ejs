@@ -2,8 +2,14 @@
 
 <style>
   .create {
-    background-color: #f6f7f8;
     min-height: 100vh;
+    background-image: url("../gradientBackground/1092567.png");
+    background: #0ab6f5;
+    background: -webkit-linear-gradient(90deg, rgba(10, 182, 245, 1) 9%, rgba(87, 121, 199, 1) 100%, rgba(237, 221, 83, 1) 100%);
+    background: -moz-linear-gradient(90deg, rgba(10, 182, 245, 1) 9%, rgba(87, 121, 199, 1) 100%, rgba(237, 221, 83, 1) 100%);
+    background: linear-gradient(90deg, rgba(10, 182, 245, 1) 9%, rgba(87, 121, 199, 1) 100%, rgba(237, 221, 83, 1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#0AB6F5", endColorstr="#EDDD53", GradientType=1);
+
   }
 
   form {
@@ -13,6 +19,8 @@
   .ticket {
     border-radius: 10px;
   }
+
+
 </style>
 
 <body class="create p-3 p-md-4">
@@ -25,22 +33,11 @@
         <!-- Heading -->
         <div class="ticket-heading mb-4">
           <span class="d-flex align-items-center gap-2 fs-4 fs-md-3">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="32"
-              height="32"
-              viewBox="0 0 16 16"
-            >
-              <path
-                fill="#137fec"
-                d="m14.61 6.914l-7.632 8.08a1.614 1.614 0 0 1-2.69-1.66L5.5 10H2.677A1.677 1.677 0 0 1 1.12 7.7l2.323-5.807A2.216 2.216 0 0 1 5.5.5h4c.968 0 1.637.967 1.298 1.873L10 4.5h3.569a1.431 1.431 0 0 1 1.04 2.414Z"
-              />
-            </svg>
-
-            <b>Raise a Ticket</b>
+           
+            <b style="color: white;"> ⚡Raise a Ticket</b>
           </span>
 
-          <p class="text-muted mt-2">
+          <p class="text-muted mt-2" style="color: white !important;">
             Our AI will automatically route your ticket to the right department
             for faster solutions.
           </p>
@@ -49,7 +46,7 @@
         <!-------------- create ticket form --------------->
         <form
           method="post"
-          class="form p-3 p-md-4 rounded-4 row gap-2 shadow"
+          class="form p-3 p-md-4 rounded-4 row gap-2 shadow "
           action="/helpdesk/dashboard"
           nonvalidate
         >
