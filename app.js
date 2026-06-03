@@ -89,8 +89,19 @@ app.get("/tickets", pageRouter.toTickets);
 
 app.get("/performance", pageRouter.toPerformance);
 
+app.all("*splat", (req,res,next) =>{
+  next ( new expressError(`Page Not Found`, 404));
+});
+
+app.use("*splat", (err,req,res,next) =>{
+  err.statusCode = err.statusCode || 402;
+  err.message = err.message || " Something Went Wrong";
+  res.status(err.statusCode).render("error",{err});
+})
+
 // DB & cron
 connectToDB();
+
 
 // Start server
 app.listen(8080, () => console.log("Server running on port 8080"));
