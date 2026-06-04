@@ -76,7 +76,7 @@ exports.destroyTicket = async (req, res) => {
 };
 
  exports.getTicketsLast7Days = async (req, res) => {
-  try {
+  
     const now = new Date();
     const startDate = new Date();
     startDate.setDate(now.getDate() - 6);
@@ -86,7 +86,6 @@ exports.destroyTicket = async (req, res) => {
       createdAt: { $gte: startDate },
     });
 
-    // Build map
     const map = {};
 
     tickets.forEach((t) => {
@@ -112,10 +111,6 @@ exports.destroyTicket = async (req, res) => {
     }
 
     res.json({ labels, data });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Server Error" });
-  }
 };
 
 exports.getTicketsAPI = async (req, res) => {

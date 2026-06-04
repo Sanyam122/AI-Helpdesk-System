@@ -26,6 +26,8 @@ const updateStatus = require("./cron/ticketcron");
 const notificationModel = require("./Models/notification.models");
 const notificationRouter = require("./routes/notifications.route");
 const pageRouter = require("./routes/page.route");
+const { error } = require("console");
+
 
 // App config
 app.set("view engine", "ejs");
@@ -53,7 +55,7 @@ app.use("/helpdesk/auth", authRouter);
 app.use("/api/graph", graphRouter);
 app.use("/api/tickets", ticketRoutes);
 app.use("/helpdesk", notificationRouter);
-
+app.use(pageRouter);
 
 
 
@@ -74,30 +76,17 @@ app.post("/api/chat", async (req, res) => {
   }
 });
 
-// Page routes
-app.get("/home", pageRouter.toHome);
-app.get("/login",pageRouter.toLogin);
-app.get("/signin", pageRouter.toSignIn);
-app.get("/helpdesk/actionCenter", pageRouter.toActionCenter);
-app.get("/helpdesk/dashboard", ticketController.getTickets);
-app.get("/helpdesk/newTicket", ticketController.getNewTicket);
-app.post("/helpdesk/dashboard", ticketController.createTicket); 
-app.get("/helpdesk/ticket/:id", ticketController.editTicket);
-app.get("/helpdesk/newTicket", ); 
-
-app.get("/tickets", pageRouter.toTickets);
-
-app.get("/performance", pageRouter.toPerformance);
-
 app.all("*splat", (req,res,next) =>{
   next ( new expressError(`Page Not Found`, 404));
 });
 
-app.use("*splat", (err,req,res,next) =>{
-  err.statusCode = err.statusCode || 402;
-  err.message = err.message || " Something Went Wrong";
-  res.status(err.statusCode).render("error",{err});
-})
+
+app.use((err, req, res, next) => {
+  err.statusCode = err.statusCode || 500;
+  err.message    = err.message    || "Something Went Wrong";
+  err.cause      = err.cause?.message ?? err.cause ?? "No additional cause provided";
+  res.status(err.statusCode).render("error", { err });
+});
 
 // DB & cron
 connectToDB();

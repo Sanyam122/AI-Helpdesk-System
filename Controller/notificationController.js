@@ -47,10 +47,10 @@ exports.notificationResponse = async function (req, res) {
     await notification.save();
 
     await Ticket.findByIdAndUpdate(notification.ticketId, {
-            status: action === "Approved" ? "open" : "closed"
+        status: action === "Approved" ? "open" : "closed"
     });
 
-     updateStatus(notification.ticketId);
+    updateStatus(notification.ticketId);
 
     console.log("Corn is called");
 

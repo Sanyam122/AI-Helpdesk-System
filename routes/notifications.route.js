@@ -2,8 +2,9 @@
 const express = require("express");
 const router = express.Router();
 const { notificationResponse , getActionCenter } = require("../Controller/notificationController");
+const wrapAsync = require("../utils/wrapAsync");
 
-router.get("/actionCenter", getActionCenter);
-router.post("/approve/:id", notificationResponse);
+router.get("/actionCenter", wrapAsync( getActionCenter ));
+router.post("/approve/:id", wrapAsync(notificationResponse));
 
 module.exports = router;
