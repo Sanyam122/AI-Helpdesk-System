@@ -2,7 +2,7 @@ const Ticket = require("../Models/tickets.models");
 const User = require("../Models/user");
 const { createNotification } = require("../Controller/notificationController");
 
- exports.getNewTicket = (req, res) => {
+exports.getNewTicket = (req, res) => {
   res.render("create");
 };
 
@@ -15,6 +15,7 @@ exports.createTicket = async (req, res) => {
     priority,
     description,
     createdBy: req.user._id,
+    status: "Open",
   });
 
   await User.findByIdAndUpdate(
@@ -23,7 +24,7 @@ exports.createTicket = async (req, res) => {
     { new: true },
   );
 
-    createNotification(ticket._id);
+  await createNotification(ticket._id);
 
   res.redirect("/helpdesk/dashboard");
 };
@@ -31,10 +32,9 @@ exports.createTicket = async (req, res) => {
 exports.getTickets = async (req, res) => {
   if (!req.user) return res.status(401).json({ message: "User not found" });
 
-  const tickets = await Ticket.find({ createdBy: req.user });
+  const tickets = await Ticket.find({ createdBy: req.user._id });
 
   res.render("dashboard", { tickets, user: req.user });
-  
 };
 
 exports.editTicket = async (req, res) => {
@@ -48,7 +48,7 @@ exports.updateTicket = async (req, res) => {
   const { title, category, priority, description } = req.body;
 
   const updatedTicket = await Ticket.findOneAndUpdate(
-    { _id: req.params.id },
+    { _id: req.params.id, createdBy: req.user._id },
     { title, category, priority, description },
     { new: true, runValidators: true },
   );
@@ -75,42 +75,42 @@ exports.destroyTicket = async (req, res) => {
   res.redirect("/helpdesk/dashboard");
 };
 
- exports.getTicketsLast7Days = async (req, res) => {
-  
-    const now = new Date();
-    const startDate = new Date();
-    startDate.setDate(now.getDate() - 6);
-    startDate.setHours(0, 0, 0, 0);
+exports.getTicketsLast7Days = async (req, res) => {
+  if (!req.user) return res.status(401).json({ message: "User not found" });
 
-    const tickets = await Ticket.find({
-      createdAt: { $gte: startDate },
-    });
+  const now = new Date();
+  const startDate = new Date();
+  startDate.setDate(now.getDate() - 6);
+  startDate.setHours(0, 0, 0, 0);
 
-    const map = {};
+  const tickets = await Ticket.find({
+    createdBy: req.user._id,
+    createdAt: { $gte: startDate },
+  });
 
-    tickets.forEach((t) => {
-      const date = new Date(t.createdAt);
-      const key = date.toISOString().split("T")[0];
+  const map = {};
 
-      map[key] = (map[key] || 0) + 1;
-    });
+  tickets.forEach((t) => {
+    const date = new Date(t.createdAt);
+    const key = date.toISOString().split("T")[0];
+    map[key] = (map[key] || 0) + 1;
+  });
 
-    const labels = [];
-    const data = [];
+  const labels = [];
+  const data = [];
 
-    for (let i = 6; i >= 0; i--) {
-      const d = new Date();
-      d.setDate(now.getDate() - i);
-      d.setHours(0, 0, 0, 0);
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date();
+    d.setDate(now.getDate() - i);
+    d.setHours(0, 0, 0, 0);
 
-      const key = d.toISOString().split("T")[0];
+    const key = d.toISOString().split("T")[0];
 
-      labels.push(d.toLocaleDateString("en-US", { weekday: "short" }));
+    labels.push(d.toLocaleDateString("en-US", { weekday: "short" }));
+    data.push(map[key] || 0);
+  }
 
-      data.push(map[key] || 0);
-    }
-
-    res.json({ labels, data });
+  res.json({ labels, data });
 };
 
 exports.getTicketsAPI = async (req, res) => {
@@ -118,7 +118,6 @@ exports.getTicketsAPI = async (req, res) => {
 
   const page = parseInt(req.query.page) || 1;
   const limit = 2;
-
   const skip = (page - 1) * limit;
 
   const totalTickets = await Ticket.countDocuments({
@@ -136,4 +135,3 @@ exports.getTicketsAPI = async (req, res) => {
     totalPages: Math.ceil(totalTickets / limit),
   });
 };
-

@@ -24,13 +24,14 @@ const ticketSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum:["Open","In Progress","Resolved","Closed"],
+      enum: ["Open", "In Progress", "Resolved", "Closed"],
       default: "Open",
     },
-    approval:{
-      type: Boolean,
-      enum:["Approved","Denied"]
-    }
+    approval: {
+      type: String,
+      enum: ["Approved", "Denied"],
+      default: null,
+    },
   },
   { timestamps: true },
 );

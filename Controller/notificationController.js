@@ -1,60 +1,64 @@
 const notificationModel = require("../Models/notification.models");
 const Ticket = require("../Models/tickets.models");
-const {updateStatus} = require("../cron/ticketcron");
+const { updateStatus } = require("../cron/ticketcron");
 
 exports.createNotification = async function (ticketId) {
-    const notification = await notificationModel.create({
-        status: "Pending",
-        title: "Database Access Request",
-        request: "Our technician wants access to your resources and database",
-        ticketId,
-    });
+    
+        const notification = await notificationModel.create({
+            status: "Pending",
+            title: "Database Access Request",
+            request: "Our technician wants access to your resources and database",
+            ticketId,
+        });    
 
-    setTimeout(async () => {
-        try {
-            const currentNotification = await notificationModel.findById(notification._id);
+        setTimeout(async () => {
+            try {
+                const currentNotification = await notificationModel.findById(notification._id);
 
-            if (currentNotification && currentNotification.status === "Pending") {
-                currentNotification.status = "Expired";
-                await currentNotification.save();
+                if (currentNotification && currentNotification.status === "Pending") {
+                    currentNotification.status = "Expired";
+                    await currentNotification.save();
 
-                await Ticket.findByIdAndUpdate(ticketId, { status: "closed" });
+                  
+                    await Ticket.findByIdAndUpdate(ticketId, { status: "Closed" });
+                }
+            } catch (err) {
+                console.error("Auto-expire failed:", err);
             }
-        } catch (err) {
-            console.error("Auto-expire failed:", err);
-        }
-    }, 2 * 60 * 60 * 1000);
-};
+        }, 2 * 60 * 60 * 1000);
+
+    };
 
 exports.getActionCenter = async function (req, res) {
-     const notifications = await notificationModel.find({ status: "Pending" });
+
+        const notifications = await notificationModel.find({ status: "Pending" });
         res.render("actionCenter", { notifications });
+    
 };
 
 exports.notificationResponse = async function (req, res) {
+   
+        const { action } = req.body;
 
-    const { action } = req.body;
+        if (!["Approved", "Denied"].includes(action)) {
+            return res.status(400).json({ error: "Invalid Action" });
+        }
 
-    console.log( action );
+        const notification = await notificationModel.findById(req.params.id);
 
-    if( !["Approved","Denied"].includes( action ))return res.status(400).json({error : "Invalid Action "});
+        if (!notification) {
+            return res.status(404).json({ error: "Notification not found" });
+        }
 
-    const notification = await notificationModel.findById(req.params.id);
+        notification.status = action;
+        await notification.save();
 
-    if( !notification )return res.status(400).json({error : " Notification not found "});
+        await Ticket.findByIdAndUpdate(notification.ticketId, {
+            status: action === "Approved" ? "Open" : "Closed",
+            approval: action,
+        });
 
-    notification.status = action;
-    await notification.save();
+        await updateStatus(notification.ticketId);
 
-    await Ticket.findByIdAndUpdate(notification.ticketId, {
-        status: action === "Approved" ? "open" : "closed"
-    });
-
-    updateStatus(notification.ticketId);
-
-    console.log("Corn is called");
-
-    return res.redirect("/helpdesk/dashboard");
-
-
+        return res.redirect("/helpdesk/dashboard");
 };

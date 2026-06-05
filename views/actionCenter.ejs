@@ -39,7 +39,7 @@
         <div class="m-2 fw-500"><%= notification.ticketId %></div>
 
         <div class="accessButtons mt-3 mx-2  gap-3">
-         <form method="post" action="approve/<%= notification._id %>">
+         <form method="post" action="/helpdesk/approve/<%= notification._id %>">
             <input type="hidden" name="action" value="Approved">
            <button class="btn btn-primary" type="submit" data-action="Approved">Approve</button>
            </form>
