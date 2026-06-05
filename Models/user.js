@@ -6,19 +6,31 @@ const userSchema = new Schema({
     type: String,
     required: [true, "Username is required."],
   },
+
   email: {
     type: String,
     required: [true, "Email is required."],
     unique: true,
   },
+
   password: {
     type: String,
-    required: [true, "Password is required."],
   },
+
   count: {
     type: Number,
+    default: 0,
+  },
+
+  googleId: {
+    type: String,
+    unique: true,
+    sparse: true,
+  },
+
+  avatar: {
+    type: String,
   },
 });
 
-const User = mongoose.model("users", userSchema);
-module.exports = User;
+module.exports = mongoose.model("users", userSchema);

@@ -4,6 +4,9 @@ const app = express();
 const mongoose = require("mongoose");
 const path = require("path");
 require("dotenv").config();
+const session = require("express-session");
+const passport = require("passport");
+require("./config/passport");
 
 const ejsMate = require("ejs-mate");
 const cookieParser = require("cookie-parser");
@@ -48,7 +51,15 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use(
+  session({
+    secret: process.env.JWT_SECRET,
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 
+app.use(passport.initialize());
 
 // Routes
 app.use("/helpdesk/auth", authRouter);

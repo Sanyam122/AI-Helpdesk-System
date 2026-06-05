@@ -178,6 +178,39 @@ async function login(req, res) {
   return res.redirect("/helpdesk/dashboard");
 }
 
-const authController = { register, getMe, logout, login };
+//Google Login 
+async function googleLogin(req, res) {
+  const token = jwt.sign(
+    { id: req.user._id },
+    config.JWT_SECRET,
+    {
+      expiresIn: "7d",
+    }
+  );
+
+  await sessionModel.create({
+    user: req.user._id,
+    token,
+    ip: req.ip,
+    userAgent: req.headers["user-agent"],
+  });
+
+  res.cookie("accessToken", token, {
+    httpOnly: true,
+    secure: false,
+    sameSite: "strict",
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+  });
+
+  return res.redirect("/helpdesk/dashboard");
+}
+
+const authController = {
+  register,
+  getMe,
+  logout,
+  login,
+  googleLogin,
+};
 
 module.exports = authController;

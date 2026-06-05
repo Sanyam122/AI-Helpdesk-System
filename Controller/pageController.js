@@ -1,3 +1,4 @@
+const { updateStatus } = require("../cron/ticketcron");
 const Ticket = require("../Models/tickets.models");
 
 toPerformance = async (req, res) => {
@@ -21,6 +22,8 @@ toTickets =  async (req, res) => {
     createdBy : req.user,
     status: "In Progress"
   })
+  tickets.map((ticket) => updateStatus(ticket._id));
+  console.log( "Update Status function is called");
   return res.render("Tickets", { tickets , resolvedTickets , pendingTickets, openTickets});
 };
 

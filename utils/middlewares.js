@@ -3,28 +3,52 @@ const User = require("../Models/user");
 const config = require("../config/config");
 
 async function userIdentification(req, res, next) {
-  const publicRoutes = [
-    "/home",
-    "/login", 
-    "/signin",
-    "/helpdesk/auth/login",    // ✅ add this
-    "/helpdesk/auth/register", // ✅ add this
-  ];
 
-  if (publicRoutes.includes(req.path)) return next();
+    const publicRoutes = [
+      "/home",
+      "/login",
+      "/signin",
+      "/helpdesk/auth/login",
+      "/helpdesk/auth/register",
+      "/helpdesk/auth/google",
+      "/helpdesk/auth/google/callback",
+    ];
 
-  const token = req.cookies.accessToken || req.headers.authorization?.split(" ")[1];
+    if (
+      publicRoutes.includes(req.path) ||
+      req.path.startsWith("/helpdesk/auth/google")
+    ) {
+      return next();
+    }
 
-  if (!token) return res.redirect("/home");
+    const token =
+      req.cookies.accessToken ||
+      req.headers.authorization?.split(" ")[1];
 
-  try {
-    const decodedData = jwt.verify(token, config.JWT_SECRET);
-    req.user = await User.findById(decodedData.id);
+    if (!token) {
+      return res.redirect("/home");
+    }
+
+    const decodedData = jwt.verify(
+      token,
+      config.JWT_SECRET
+    );
+
+    const user = await User.findById(decodedData.id);
+
+    if (!user) {
+      res.clearCookie("accessToken");
+      return res.redirect("/home");
+    }
+
+    req.user = user;
     next();
-  } catch (err) {
-    res.clearCookie("accessToken");
-    return res.redirect("/home");
-  }
+  
 }
 
-module.exports = { userIdentification };
+
+
+
+module.exports = {
+  userIdentification,
+};
