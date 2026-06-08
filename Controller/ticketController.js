@@ -26,7 +26,7 @@ exports.createTicket = async (req, res) => {
 
   await createNotification(ticket._id);
 
-  res.redirect("/helpdesk/dashboard");
+  res.redirect("/helpdesk/actionCenter");
 };
 
 exports.getTickets = async (req, res) => {

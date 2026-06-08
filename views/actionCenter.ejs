@@ -38,7 +38,7 @@
         <div  class=" m-2 border-none rounded-4">Rahul Sharma requested access to your DataBase </div>
         <div class="m-2 fw-500"><%= notification.ticketId %></div>
 
-        <div class="accessButtons mt-3 mx-2  gap-3">
+        <div class="accessButtons mt-3 mx-2  gap-3 d-flex">
          <form method="post" action="/helpdesk/approve/<%= notification._id %>">
             <input type="hidden" name="action" value="Approved">
            <button class="btn btn-primary" type="submit" data-action="Approved">Approve</button>
