@@ -115,7 +115,7 @@
               <tr>
                 <td><%= ticket.title %></td>
                 <td><%= ticket.category %></td>
-                <td><%= ticket.assignedTo ? '@' + ticket.assignedTo : 'Unassigned' %></td>
+                <td>@<%= ticket.assignedTo %></td>
               </tr>
               <% } %>
             </tbody>

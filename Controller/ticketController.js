@@ -1,6 +1,7 @@
 const Ticket = require("../Models/tickets.models");
 const User = require("../Models/user");
 const { createNotification } = require("../Controller/notificationController");
+const {faker} = require("@faker-js/faker");
 
 exports.getNewTicket = (req, res) => {
   res.render("create");
@@ -8,6 +9,8 @@ exports.getNewTicket = (req, res) => {
 
 exports.createTicket = async (req, res) => {
   const { title, category, priority, description } = req.body;
+  
+  const solver = faker.person.fullName();
 
   const ticket = await Ticket.create({
     title,
@@ -16,6 +19,7 @@ exports.createTicket = async (req, res) => {
     description,
     createdBy: req.user._id,
     status: "Open",
+    assignedTo: solver,
   });
 
   await User.findByIdAndUpdate(

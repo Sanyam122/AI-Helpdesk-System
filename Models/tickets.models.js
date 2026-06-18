@@ -32,6 +32,10 @@ const ticketSchema = new mongoose.Schema(
       enum: ["Approved", "Denied"],
       default: null,
     },
+    assignedTo:{
+      type: String,
+      default: "To be assigned",
+    }
   },
   { timestamps: true },
 );
