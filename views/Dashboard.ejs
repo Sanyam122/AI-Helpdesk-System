@@ -1,188 +1,488 @@
-<% layout("/layouts/boilerplate") %>
-
-<!-- Navbar -->
-<%- include("layouts/navbar.ejs") %>
-
-<!-- MAIN LAYOUT -->
-<div class="container-fluid ">
-  <div class="row dashboard-container">
-
-    <!-- Sidebar -->
-    <%- include("layouts/sidebar") %>
-
-    <!-- MAIN -->
-    <main class="col-lg-7 col-md-7 col-12 ">
-      <div class="container-fluid">
-
-        <div class="add-buttons mt-2">
-          <span>MY PRIORITY TICKETS (<%= user.count %>)</span>
-        </div>
-
-        <br />
-
-        <div id="tickets-container"></div>
-
-        <div id="pagination" class="d-flex justify-content-center mt-4"></div>
-
-      </div>
-    </main>
-
-    <div class="ai-bar col-lg-3 col-md-4 d-none d-md-block p-3 ">
-
-      <div class="quickCreate container p-4 shadow mt-2 me-5 rounded-4 bg-white">
-        
-        <div class="d-flex align-items-center gap-2 mb-2">
-          <i class="fa-solid fa-plus text-primary"></i>
-          <span class="fs-5 text-primary"><b>Quick Create</b></span>
-        </div>
-
-        <form method="post" action="/helpdesk/dashboard">
-          <input class="form-control" name="title" placeholder="Enter a title" required />
+  <% layout("/layouts/boilerplate") %>
+  
+  <!-- Navbar -->
+  <%- include("layouts/navbar.ejs") %>
+  
+  <!-- MAIN LAYOUT -->
+  <div class="container-fluid">
+    <div class="row dashboard-container">
+  
+      <!-- Sidebar -->
+      <%- include("layouts/sidebar") %>
+  
+      <!-- MAIN -->
+      <main class="col-lg-7 col-md-7 col-12">
+        <div class="container-fluid">
           <br />
-          <input class="form-control" name="category" placeholder="Category" required />
-          <br />
-          <textarea class="form-control" name="description" placeholder="Description"></textarea>
-          <br />
-          <button class="btn btn-primary w-100">Create Ticket</button>
-        </form>
-
-      </div>
-      <div class="container mt-3 me-4">
-        <iframe
-          src="/Chatbot/helpdeskChatbot.html"
-          style="width: 100%; height: 400px; border: none; border-radius: 16px;">
-          
-        </iframe>
-      </div>
-
-    </div>
-
-  </div>
-</div>
-<%- include("layouts/mobileNav.ejs") %>
-
-<script>
-function getPriorityDotClass(priority) {
-  const p = (priority || "").toLowerCase();
-  if (p === "high")   return "dot-high";
-  if (p === "medium") return "dot-medium";
-  return "dot-low";
-}
-
-function getPriorityBadgeClass(priority) {
-  const p = (priority || "").toLowerCase();
-  if (p === "high")   return "badge-high";
-  if (p === "medium") return "badge-medium";
-  return "badge-low";
-}
-
-function formatDate(dateStr) {
-  if (!dateStr) return "";
-  const d = new Date(dateStr);
-  return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-}
-
-async function deleteTicket(event, id) {
-  event.stopPropagation(); // prevent card click
-  if (!confirm("Delete this ticket?")) return;
-
-  await fetch(`/api/tickets/${id}/edit`, { method: "DELETE" });
-  loadTickets(); // reload after delete
-}
-
-function renderTicketCard(t) {
-  const priority   = t.priority || "low";
-  const dotClass   = getPriorityDotClass(priority);
-  const badgeClass = getPriorityBadgeClass(priority);
-  const idStr      = t._id ? String(t._id).slice(-5).toUpperCase() : "00000";
-  const dueDate    = t.dueDate ? formatDate(t.dueDate) : "";
-  const category   = t.category || "";
-
-  return `
-    <div class="ticket-card" style="cursor:pointer;" onclick="window.location='/helpdesk/ticket/${t._id}'">
-      <div class="ticket-aside">
-        <div class="ticket-aside-dot ${dotClass}"></div>
-        <div class="ticket-aside-num">${idStr}</div>
-      </div>
-
-      <div class="ticket-main">
-        <div class="ticket-top">
-          <div class="ticket-title">${t.title || "Untitled"}</div>
-          <div class="ticket-desc">${t.description || ""}</div>
-        </div>
-        <div class="ticket-tags">
-          ${category ? `<span class="ticket-tag">${category}</span>` : ""}
-          ${t.status  ? `<span class="ticket-tag">${t.status}</span>` : ""}
-        </div>
-      </div>
-
-      <div class="ticket-right">
-        <span class="ticket-priority-badge ${badgeClass}">${priority}</span>
-        <div class="ticket-right-bottom">
-          ${dueDate ? `
-          <div class="ticket-due">
-            <svg viewBox="0 0 12 12" fill="none">
-              <circle cx="6" cy="6" r="4.5" stroke="#7a8db5" stroke-width="1.2"/>
-              <path d="M6 3.5V6.5l1.5 1" stroke="#7a8db5" stroke-width="1.2"/>
-            </svg>
-            ${dueDate}
-          </div>` : ""}
-          <div class="ticket-status">
-            <div class="status-dot"></div>
-            <span class="status-label">Open</span>
+  
+          <div class="ticket-section">
+  
+            <div class="ticket-header-bar">
+              <div>
+                <h4>Priority Tickets</h4>
+                <p>Track and manage all active support requests.</p>
+              </div>
+  
+              <div class="ticket-stats">
+                <span id="ticket-count">0 Tickets</span>
+              </div>
+            </div>
+  
+            <div id="tickets-container" class="premium-ticket-container"></div>
+  
+            <div class="pagination-wrap">
+              <div id="pagination-summary" class="pagination-summary"></div>
+              <div id="pagination" class="premium-pagination"></div>
+            </div>
+  
           </div>
+  
         </div>
-
-        <button
-          onclick="deleteTicket(event, '${t._id}')"
-          style="background:none;border:none;cursor:pointer;padding:4px;margin-top:6px;"
-          title="Delete ticket"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#e53e3e" viewBox="0 0 16 16">
-            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
-            <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
-          </svg>
-        </button>
-
+      </main>
+  
+      <div class="ai-bar col-lg-3 col-md-4 d-none d-md-block p-3">
+  
+        <div class="quickCreate container p-4 shadow mt-2 me-5 rounded-4 bg-white">
+  
+          <div class="d-flex align-items-center gap-2 mb-2">
+            <i class="fa-solid fa-plus text-primary"></i>
+            <span class="fs-5 text-primary"><b>Quick Create</b></span>
+          </div>
+  
+          <form method="post" action="/helpdesk/dashboard">
+            <input class="form-control" name="title" placeholder="Enter a title" required />
+            <br />
+            <input class="form-control" name="category" placeholder="Category" required />
+            <br />
+            <textarea class="form-control" name="description" placeholder="Description"></textarea>
+            <br />
+            <button class="btn btn-primary w-100">Create Ticket</button>
+          </form>
+  
+        </div>
+  
+        <div class="container mt-3 me-4">
+          <iframe
+            src="/Chatbot/helpdeskChatbot.html"
+            style="width:100%; height:400px; border:none; border-radius:16px;">
+          </iframe>
+        </div>
+  
       </div>
+  
     </div>
-  `;
-}
-
-async function loadTickets(page = 1) {
-  const res = await fetch(`/api/tickets/dashboard?page=${page}`);
-  const data = await res.json();
-
-  const container = document.getElementById("tickets-container");
-  container.innerHTML = data.tickets.length
-    ? data.tickets.map(renderTicketCard).join("")
-    : `<p style="color:#7a8db5;font-size:13px;padding:1rem 0;">No tickets found.</p>`;
-
-  const p = document.getElementById("pagination");
-  p.innerHTML = "";
-
-  const prev = document.createElement("button");
-  prev.textContent = "← Prev";
-  prev.className = "btn btn-light btn-sm me-1";
-  prev.disabled = page === 1;
-  prev.onclick = () => loadTickets(page - 1);
-  p.appendChild(prev);
-
-  for (let i = 1; i <= data.totalPages; i++) {
-    const btn = document.createElement("button");
-    btn.textContent = i;
-    btn.className = `btn btn-sm me-1 ${i === page ? "btn-primary" : "btn-light"}`;
-    btn.onclick = () => loadTickets(i);
-    p.appendChild(btn);
+  </div>
+  
+  <%- include("layouts/mobileNav.ejs") %>
+  
+  <script>
+  const TICKETS_PER_PAGE = 5;
+  
+  const ticketState = {
+    currentPage: 1,
+    totalPages: 1,
+    totalTickets: 0,
+    isLoading: false
+  };
+  
+  const ticketsContainer = document.getElementById("tickets-container");
+  const pagination = document.getElementById("pagination");
+  const paginationSummary = document.getElementById("pagination-summary");
+  const ticketCount = document.getElementById("ticket-count");
+  
+  function escapeHtml(value){
+    return String(value ?? "")
+      .replace(/&/g,"&amp;")
+      .replace(/</g,"&lt;")
+      .replace(/>/g,"&gt;")
+      .replace(/"/g,"&quot;")
+      .replace(/'/g,"&#039;");
   }
-
-  const next = document.createElement("button");
-  next.textContent = "Next →";
-  next.className = "btn btn-light btn-sm ms-1";
-  next.disabled = page === data.totalPages;
-  next.onclick = () => loadTickets(page + 1);
-  p.appendChild(next);
-}
-
-window.onload = () => loadTickets(1);
-</script>
+  
+  function getPriorityDotClass(priority){
+    const p = String(priority || "").toLowerCase();
+  
+    if(p === "high") return "dot-high";
+    if(p === "medium") return "dot-medium";
+  
+    return "dot-low";
+  }
+  
+  function getPriorityBadgeClass(priority){
+    const p = String(priority || "").toLowerCase();
+  
+    if(p === "high") return "badge-high";
+    if(p === "medium") return "badge-medium";
+  
+    return "badge-low";
+  }
+  
+  function formatDate(dateStr){
+    if(!dateStr) return "";
+  
+    const d = new Date(dateStr);
+  
+    if(Number.isNaN(d.getTime())) return "";
+  
+    return d.toLocaleDateString("en-US",{
+      month:"short",
+      day:"numeric"
+    });
+  }
+  
+  function pluralizeTicket(count){
+    return `${count} ${count === 1 ? "Ticket" : "Tickets"}`;
+  }
+  
+  function normalizeTicketResponse(data, requestedPage){
+    const tickets = Array.isArray(data?.tickets)
+      ? data.tickets
+      : Array.isArray(data)
+        ? data
+        : [];
+  
+    const totalTickets = Number(
+      data?.totalTickets ??
+      data?.total ??
+      data?.count ??
+      tickets.length
+    );
+  
+    const totalPages = Math.max(
+      1,
+      Number(
+        data?.totalPages ??
+        Math.ceil((totalTickets || tickets.length) / TICKETS_PER_PAGE)
+      ) || 1
+    );
+  
+    const currentPage = Math.min(
+      Math.max(
+        1,
+        Number(data?.currentPage ?? data?.page ?? requestedPage) || requestedPage
+      ),
+      totalPages
+    );
+  
+    return {
+      tickets,
+      totalTickets: Number.isFinite(totalTickets) ? totalTickets : tickets.length,
+      totalPages,
+      currentPage
+    };
+  }
+  
+  function renderLoadingState(){
+    ticketsContainer.innerHTML = `
+      <div class="loading-ticket-state">
+        <i class="fa-solid fa-spinner fa-spin fs-2"></i>
+        <h5 class="mt-3">Loading Tickets</h5>
+        <p class="mb-0">Fetching your latest priority tickets.</p>
+      </div>
+    `;
+  
+    pagination.innerHTML = "";
+    paginationSummary.textContent = "";
+  }
+  
+  function renderEmptyState(message = "Create your first support ticket."){
+    ticketsContainer.innerHTML = `
+      <div class="empty-ticket-state">
+        <i class="fa-solid fa-ticket fs-1"></i>
+        <h5 class="mt-3">No Tickets Found</h5>
+        <p>${escapeHtml(message)}</p>
+      </div>
+    `;
+  
+    pagination.innerHTML = "";
+    paginationSummary.textContent = "";
+  }
+  
+  function renderTicketCard(ticket){
+    const id = ticket?._id ? String(ticket._id) : "";
+    const idStr = id ? id.slice(-5).toUpperCase() : "00000";
+  
+    const priority = ticket?.priority || "Low";
+    const dotClass = getPriorityDotClass(priority);
+    const badgeClass = getPriorityBadgeClass(priority);
+  
+    const dueDate = ticket?.dueDate ? formatDate(ticket.dueDate) : "";
+    const category = ticket?.category || "";
+    const status = ticket?.status || "";
+  
+    return `
+      <div class="premium-ticket-card" data-ticket-id="${escapeHtml(id)}">
+  
+        <div class="ticket-accent ${dotClass}"></div>
+  
+        <div class="ticket-id-box">
+          <div class="ticket-id-dot ${dotClass}"></div>
+          <div class="ticket-id">${escapeHtml(idStr)}</div>
+          <small>#${escapeHtml(idStr)}</small>
+        </div>
+  
+        <div class="ticket-content">
+  
+          <div class="ticket-header">
+            <h5>${escapeHtml(ticket?.title || "Untitled Ticket")}</h5>
+  
+            <span class="priority-chip ${badgeClass}">
+              ${escapeHtml(priority)}
+            </span>
+          </div>
+  
+          <p>${escapeHtml(ticket?.description || "No description available.")}</p>
+  
+          <div class="ticket-meta">
+            ${
+              category
+                ? `<span class="meta-tag">${escapeHtml(category)}</span>`
+                : ""
+            }
+  
+            ${
+              status
+                ? `<span class="meta-tag status-tag">${escapeHtml(status)}</span>`
+                : ""
+            }
+          </div>
+  
+        </div>
+  
+        <div class="ticket-actions">
+  
+          ${
+            dueDate
+              ? `
+                <div class="due-date">
+                  <i class="fa-regular fa-clock"></i>
+                  ${escapeHtml(dueDate)}
+                </div>
+              `
+              : `<span></span>`
+          }
+  
+          <button
+            type="button"
+            class="delete-btn"
+            data-delete-id="${escapeHtml(id)}"
+            aria-label="Delete ticket"
+          >
+            <i class="fa-solid fa-trash"></i>
+          </button>
+  
+        </div>
+  
+      </div>
+    `;
+  }
+  
+  function getPaginationItems(currentPage, totalPages){
+    const pages = [];
+    const siblingCount = 1;
+  
+    if(totalPages <= 7){
+      for(let i = 1; i <= totalPages; i++){
+        pages.push(i);
+      }
+  
+      return pages;
+    }
+  
+    pages.push(1);
+  
+    const leftSibling = Math.max(currentPage - siblingCount, 2);
+    const rightSibling = Math.min(currentPage + siblingCount, totalPages - 1);
+  
+    if(leftSibling > 2){
+      pages.push("left-ellipsis");
+    }
+  
+    for(let i = leftSibling; i <= rightSibling; i++){
+      pages.push(i);
+    }
+  
+    if(rightSibling < totalPages - 1){
+      pages.push("right-ellipsis");
+    }
+  
+    pages.push(totalPages);
+  
+    return pages;
+  }
+  
+  function renderPagination(){
+    const { currentPage, totalPages, totalTickets } = ticketState;
+  
+    pagination.innerHTML = "";
+  
+    if(totalTickets === 0 || totalPages <= 1){
+      paginationSummary.textContent = "";
+      return;
+    }
+  
+    const startTicket = ((currentPage - 1) * TICKETS_PER_PAGE) + 1;
+    const endTicket = Math.min(currentPage * TICKETS_PER_PAGE, totalTickets);
+  
+    paginationSummary.textContent =
+      `Showing ${startTicket}-${endTicket} of ${pluralizeTicket(totalTickets)}`;
+  
+    const prevButton = document.createElement("button");
+    prevButton.type = "button";
+    prevButton.className = "pagination-arrow";
+    prevButton.innerHTML = `<i class="fa-solid fa-chevron-left"></i>`;
+    prevButton.disabled = currentPage === 1;
+    prevButton.setAttribute("aria-label","Previous page");
+    prevButton.dataset.page = String(currentPage - 1);
+    pagination.appendChild(prevButton);
+  
+    getPaginationItems(currentPage, totalPages).forEach((item)=>{
+      if(typeof item === "string"){
+        const ellipsis = document.createElement("span");
+        ellipsis.className = "pagination-ellipsis";
+        ellipsis.textContent = "...";
+        pagination.appendChild(ellipsis);
+        return;
+      }
+  
+      const pageButton = document.createElement("button");
+      pageButton.type = "button";
+      pageButton.textContent = item;
+      pageButton.dataset.page = String(item);
+      pageButton.setAttribute("aria-label",`Page ${item}`);
+  
+      if(item === currentPage){
+        pageButton.classList.add("active-page");
+        pageButton.disabled = true;
+      }
+  
+      pagination.appendChild(pageButton);
+    });
+  
+    const nextButton = document.createElement("button");
+    nextButton.type = "button";
+    nextButton.className = "pagination-arrow";
+    nextButton.innerHTML = `<i class="fa-solid fa-chevron-right"></i>`;
+    nextButton.disabled = currentPage === totalPages;
+    nextButton.setAttribute("aria-label","Next page");
+    nextButton.dataset.page = String(currentPage + 1);
+    pagination.appendChild(nextButton);
+  }
+  
+  function renderTickets(tickets){
+    if(!tickets.length){
+      renderEmptyState();
+      return;
+    }
+  
+    ticketsContainer.innerHTML = tickets.map(renderTicketCard).join("");
+  }
+  
+  async function loadTickets(page = 1){
+    if(ticketState.isLoading) return;
+  
+    ticketState.isLoading = true;
+    renderLoadingState();
+  
+    try{
+      const requestedPage = Math.max(1, Number(page) || 1);
+  
+      const res = await fetch(
+        `/api/tickets/dashboard?page=${requestedPage}&limit=${TICKETS_PER_PAGE}`,
+        {
+          headers:{
+            "Accept":"application/json"
+          }
+        }
+      );
+  
+      if(!res.ok){
+        throw new Error("Unable to load tickets");
+      }
+  
+      const data = await res.json();
+      const normalized = normalizeTicketResponse(data, requestedPage);
+  
+      if(
+        normalized.totalTickets > 0 &&
+        requestedPage > normalized.totalPages
+      ){
+        ticketState.isLoading = false;
+        await loadTickets(normalized.totalPages);
+        return;
+      }
+  
+      ticketState.currentPage = normalized.currentPage;
+      ticketState.totalPages = normalized.totalPages;
+      ticketState.totalTickets = normalized.totalTickets;
+  
+      ticketCount.textContent = pluralizeTicket(ticketState.totalTickets);
+  
+      renderTickets(normalized.tickets);
+      renderPagination();
+    }catch(error){
+      console.error(error);
+      ticketCount.textContent = "0 Tickets";
+      renderEmptyState("Unable to load tickets right now.");
+    }finally{
+      ticketState.isLoading = false;
+    }
+  }
+  
+  async function deleteTicket(id){
+    if(!id) return;
+  
+    if(!confirm("Delete this ticket?")) return;
+  
+    try{
+      const res = await fetch(`/api/tickets/${encodeURIComponent(id)}/edit`,{
+        method:"DELETE",
+        headers:{
+          "Accept":"application/json"
+        }
+      });
+  
+      if(!res.ok){
+        throw new Error("Unable to delete ticket");
+      }
+  
+      await loadTickets(ticketState.currentPage);
+    }catch(error){
+      console.error(error);
+      alert("Ticket could not be deleted. Please try again.");
+    }
+  }
+  
+  ticketsContainer.addEventListener("click",(event)=>{
+    const deleteButton = event.target.closest("[data-delete-id]");
+  
+    if(deleteButton){
+      event.stopPropagation();
+      deleteTicket(deleteButton.dataset.deleteId);
+      return;
+    }
+  
+    const ticketCard = event.target.closest("[data-ticket-id]");
+  
+    if(ticketCard && ticketCard.dataset.ticketId){
+      window.location.href = `/helpdesk/ticket/${ticketCard.dataset.ticketId}`;
+    }
+  });
+  
+  pagination.addEventListener("click",(event)=>{
+    const button = event.target.closest("button[data-page]");
+  
+    if(!button || button.disabled) return;
+  
+    const page = Number(button.dataset.page);
+  
+    if(!Number.isFinite(page) || page < 1 || page === ticketState.currentPage) return;
+  
+    loadTickets(page);
+  });
+  
+  window.addEventListener("DOMContentLoaded",()=>{
+    loadTickets(1);
+  });
+  </script>
+  

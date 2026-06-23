@@ -9,8 +9,6 @@ exports.getNewTicket = (req, res) => {
 
 exports.createTicket = async (req, res) => {
   const { title, category, priority, description } = req.body;
-  
-  const solver = faker.person.fullName();
 
   const ticket = await Ticket.create({
     title,
@@ -19,7 +17,7 @@ exports.createTicket = async (req, res) => {
     description,
     createdBy: req.user._id,
     status: "Open",
-    assignedTo: solver,
+    assignedTo: faker.person.fullName(),
   });
 
   await User.findByIdAndUpdate(
@@ -27,9 +25,8 @@ exports.createTicket = async (req, res) => {
     { $inc: { count: 1 } },
     { new: true },
   );
-
+  
   await createNotification(ticket._id);
-
   res.redirect("/helpdesk/actionCenter");
 };
 

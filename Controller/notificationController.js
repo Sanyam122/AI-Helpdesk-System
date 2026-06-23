@@ -58,8 +58,5 @@ exports.notificationResponse = async function (req, res) {
             approval: action,
         });
 
-        await updateStatus(notification.ticketId._id);
-        console.log("Update function is called for the ticket");
-
         return res.redirect("/helpdesk/dashboard");
 };
