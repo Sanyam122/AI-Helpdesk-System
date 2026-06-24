@@ -261,16 +261,11 @@
               `
               : `<span></span>`
           }
-  
-          <button
-            type="button"
-            class="delete-btn"
-            data-delete-id="${escapeHtml(id)}"
-            aria-label="Delete ticket"
-          >
-            <i class="fa-solid fa-trash"></i>
-          </button>
-  
+          <form action="/api/tickets/${ticket._id}/edit?_method=DELETE" method="POST">
+           <button type="submit" class="delete-btn" aria-label="Edit ticket">
+            <i class="fa-solid fa-trash-can"></i>
+           </button>
+          </form>
         </div>
   
       </div>

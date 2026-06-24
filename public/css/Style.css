@@ -588,6 +588,9 @@ main {
   font-size:.78rem;
   font-weight:700;
   white-space:nowrap;
+  position: absolute;
+  right: 0;
+  margin-right: 1.3rem;
 }
 
 .badge-high{

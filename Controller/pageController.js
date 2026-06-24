@@ -1,4 +1,4 @@
-const { updateStatus } = require("../cron/ticketcron");
+const { updateTicketStatus } = require("../cron/ticketcron");
 const Ticket = require("../Models/tickets.models");
 
 toPerformance = async (req, res) => {
@@ -22,7 +22,7 @@ toTickets =  async (req, res) => {
     createdBy : req.user,
     status: "In Progress"
   })
-  
+  updateTicketStatus();
   return res.render("Tickets", { tickets , resolvedTickets , pendingTickets, openTickets});
 };
 

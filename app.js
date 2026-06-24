@@ -43,9 +43,9 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(cookieParser());
 app.use(methodOverride("_method"));
 
-// User identification
+
 app.use(middlewares.userIdentification);
-// Locals middleware (before routes)
+
 app.use((req, res, next) => {
   res.locals.user = req.user;
   next();
@@ -99,9 +99,8 @@ app.use((err, req, res, next) => {
   res.status(err.statusCode).render("error", { err });
 });
 
-// DB & cron
 connectToDB();
 
 
-// Start server
 app.listen(8080, () => console.log("Server running on port 8080"));
+
