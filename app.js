@@ -30,7 +30,7 @@ const notificationModel = require("./Models/notification.models");
 const notificationRouter = require("./routes/notifications.route");
 const pageRouter = require("./routes/page.route");
 const { error } = require("console");
-
+const flash = require("connect-flash");
 
 // App config
 app.set("view engine", "ejs");
@@ -42,12 +42,17 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(cookieParser());
 app.use(methodOverride("_method"));
+app.use(flash());
 
 
 app.use(middlewares.userIdentification);
 
 app.use((req, res, next) => {
   res.locals.user = req.user;
+  res.locals.flash = {
+    success: res.flash(success),
+    error: res.flash(error),
+  };
   next();
 });
 

@@ -2,7 +2,6 @@ const Ticket = require("../Models/tickets.models");
 const User = require("../Models/user");
 const { createNotification } = require("../Controller/notificationController");
 const {faker} = require("@faker-js/faker");
-
 exports.getNewTicket = (req, res) => {
   res.render("create");
 };
