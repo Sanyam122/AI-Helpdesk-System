@@ -47,15 +47,6 @@ app.use(flash());
 
 app.use(middlewares.userIdentification);
 
-app.use((req, res, next) => {
-  res.locals.user = req.user;
-  res.locals.flash = {
-    success: res.flash(success),
-    error: res.flash(error),
-  };
-  next();
-});
-
 app.use(
   session({
     secret: process.env.JWT_SECRET,
@@ -63,6 +54,13 @@ app.use(
     saveUninitialized: false,
   })
 );
+
+app.use((req, res, next) => {
+  res.locals.user = req.user;
+  res.locals.flash = req.session.flash || null
+  delete req.session.flash
+  next();
+});
 
 app.use(passport.initialize());
 

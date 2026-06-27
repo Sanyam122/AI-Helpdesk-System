@@ -26,6 +26,10 @@ exports.createTicket = async (req, res) => {
   );
   
   await createNotification(ticket._id);
+  req.session.flash = {
+    type: "success",
+    message: "Ticket created successfully",
+  };
   res.redirect("/helpdesk/actionCenter");
 };
 
