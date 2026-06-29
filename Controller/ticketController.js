@@ -44,7 +44,6 @@ exports.getTickets = async (req, res) => {
 exports.editTicket = async (req, res) => {
   const ticket = await Ticket.findById(req.params.id);
   if (!ticket) return res.status(404).json({ message: "Ticket not found" });
-
   res.render("edit", { ticket });
 };
 
@@ -59,7 +58,10 @@ exports.updateTicket = async (req, res) => {
 
   if (!updatedTicket)
     return res.status(404).json({ message: "Ticket not found" });
-
+  req.session.flash = {
+    type: "success",
+    message: "Ticket edited successfully",
+  };
   res.redirect("/helpdesk/dashboard");
 };
 
@@ -75,7 +77,10 @@ exports.destroyTicket = async (req, res) => {
     { _id: req.user._id, count: { $gt: 0 } },
     { $inc: { count: -1 } },
   );
-
+  req.session.flash = {
+    type: "success",
+    message: "Ticket deleted successfully",
+  };
   res.redirect("/helpdesk/dashboard");
 };
 

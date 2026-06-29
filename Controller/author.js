@@ -3,8 +3,9 @@ const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
 const config = require("../config/config");
 const sessionModel = require("../Models/sessions.models");
+const expressError = require("../utils/expressError");
+const { title } = require("process");
 
-// Register Function
 async function register(req, res) {
   try {
     const { username, email, password } = req.body;
@@ -29,7 +30,6 @@ async function register(req, res) {
       email,
       password: hashPassword,
     });
-
     const token = jwt.sign({ id: user._id }, config.JWT_SECRET, {
       expiresIn: "7d",
     });
@@ -57,9 +57,9 @@ async function register(req, res) {
     });
   }
 }
-// getMe function
+// getMe Function 
 async function getMe(req, res) {
-  try {
+
     const token = req.headers.authorization?.split(" ")[1];
 
     if (!token) {
@@ -84,23 +84,13 @@ async function getMe(req, res) {
         email: user.email,
       },
     });
-  } catch (err) {
-    console.error("GetMe error:", err.message);
-    return res.status(500).json({
-      message: "Internal server error",
-      error: err.message,
-    });
-  }
 }
 // Logout function
 async function logout(req, res) {
-  try {
     const token = req.cookies.accessToken;
 
     if (!token) {
-      return res.status(400).json({
-        message: "Token not found",
-      });
+      throw new expressError(501, `token not found`);
     }
 
     const session = await sessionModel.findOne({
@@ -109,33 +99,27 @@ async function logout(req, res) {
     });
 
     if (!session) {
-      return res.status(400).json({
-        message: "Session not found.",
-      });
+      throw new expressError(400 ,"Session not found");
     }
-
     session.revoked = true;
     await session.save();
 
     res.clearCookie("accessToken");
-
-    return res.status(200).render("home");
-  } catch (error) {
-    res.send(error.message);
-  }
+    req.session.flash = {
+      title: "success",
+      message: "Looged out successfully"
+    }
+    return res.render("home");
 }
 //login function
 async function login(req, res) {
   const { email, password } = req.body;
-
   const user = await User.findOne({
     email,
   });
 
   if (!user) {
-    return res.status(401).json({
-      message: "Invalid email or password",
-    });
+    throw new expressError(501, `User not found `);
   }
 
   const loginPassword = crypto
@@ -143,17 +127,7 @@ async function login(req, res) {
     .update(password)
     .digest("hex");
 
-  const newPassword = crypto
-    .createHash("sha256")
-    .update(password)
-    .digest("hex");
-  const pass = loginPassword === newPassword;
-
-  if (!pass) {
-    return res.status(401).json({
-      message: "Invalid email or password",
-    });
-  }
+  if( loginPassword !== user.password) throw new expressError(501,`Wrong password`);
 
   const token = jwt.sign({ id: user._id }, config.JWT_SECRET, {
     expiresIn: "7d",
@@ -174,7 +148,10 @@ async function login(req, res) {
   });
 
   await session.save();
-
+  req.session.flash = {
+    title:"success",
+    message:"Login Successfull"
+  }
   return res.redirect("/helpdesk/dashboard");
 }
 
@@ -201,7 +178,11 @@ async function googleLogin(req, res) {
     sameSite: "strict",
     maxAge: 7 * 24 * 60 * 60 * 1000,
   });
-
+  req.session.flash = {
+    title: "success",
+    message: "Login Successfull"
+  }
+  
   return res.redirect("/helpdesk/dashboard");
 }
 
