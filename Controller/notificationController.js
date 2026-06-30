@@ -32,7 +32,8 @@ exports.createNotification = async function (ticketId) {
 exports.getActionCenter = async function (req, res) {
 
         const notifications = await notificationModel.find({ status: "Pending" });
-        res.render("actionCenter", { notifications });
+        const ticket = await Ticket.findOne({id : notifications.ticketId});
+        res.render("actionCenter", { notifications, ticket });
     
 };
 
@@ -57,6 +58,7 @@ exports.notificationResponse = async function (req, res) {
             status: action === "Approved" ? "Open" : "Closed",
             approval: action,
         });
-
+        await notificationModel.findByIdAndDelete(req.params.id);
+        console.log(" notification deleted successfully");
         return res.redirect("/helpdesk/dashboard");
 };

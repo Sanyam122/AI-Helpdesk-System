@@ -56,8 +56,7 @@ exports.updateTicket = async (req, res) => {
     { new: true, runValidators: true },
   );
 
-  if (!updatedTicket)
-    return res.status(404).json({ message: "Ticket not found" });
+  if (!updatedTicket)return res.status(404).json({ message: "Ticket not found" });
   req.session.flash = {
     type: "success",
     message: "Ticket edited successfully",
