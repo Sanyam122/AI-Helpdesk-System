@@ -8,7 +8,6 @@ exports.getNewTicket = (req, res) => {
 
 exports.createTicket = async (req, res) => {
   const { title, category, priority, description } = req.body;
-
   const ticket = await Ticket.create({
     title,
     category,
@@ -18,13 +17,11 @@ exports.createTicket = async (req, res) => {
     status: "Open",
     assignedTo: faker.person.fullName(),
   });
-
   await User.findByIdAndUpdate(
     req.user._id,
     { $inc: { count: 1 } },
     { new: true },
   );
-  
   await createNotification(ticket._id);
   req.session.flash = {
     type: "success",
