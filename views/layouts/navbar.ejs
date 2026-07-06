@@ -24,7 +24,11 @@
         <h6 class="mb-0 fw-semibold"><%= user.username %></h6>
         <small class="text-muted">Project Manager</small>
       </div>
+      <% if (!user.avatar) { %>
+        <i class="fa-solid fa-user" style="font-size: 45px;"></i>
+      <% } else { %>
       <img src="<%= user.avatar %>" class="rounded-circle" width="45" height="45" />
+      <% } %>
     </div>
   </div>
   <% if (flash) { %>
