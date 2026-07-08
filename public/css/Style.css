@@ -8,6 +8,64 @@ a{
   text-decoration: none !important;
 }
 
+/* Home Page  */
+html,
+body {
+  overflow-x: hidden;
+}
+.mycard {
+  min-height: 18rem;
+  max-width: 22rem;
+  width: 100%;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+.icon {
+  background-color: rgb(161, 212, 251);
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px;
+}
+
+.icon2 {
+  background-color: rgba(0, 128, 0, 0.4);
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px;
+}
+
+.icon3 {
+  background-color: rgb(255, 212, 59, 0.3);
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px;
+}
+
+.another-section {
+  background-color: #001a2c;
+}
+
+.ready {
+  color: white;
+}
+.feature-check > p {
+  color: white;
+  display: inline;
+  opacity: 0.7;
+}
+
+.footer-logo {
+  height: 2rem;
+  width: 2rem;
+}
+.footer {
+  min-height: 40vh;
+  text-wrap: wrap;
+}
+.list > ul {
+  padding: 0;
+  list-style: none;
+}
+.bottompart > p {
+  margin-right: auto;
+}
+.privacy > p {
+  margin-right: 0.5rem;
+}
 
 body {
   font-family: "Delight", sans-serif;
