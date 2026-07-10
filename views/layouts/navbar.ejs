@@ -1,6 +1,6 @@
 <style>
   .profile-card:hover{
-    border: 1px solid black !important;
+    border: none !important;
     box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
     cursor: pointer;
   }
@@ -9,13 +9,16 @@
     border: none;
   }
   .profileDetails:popover-open{
+    border: 0.5px solid black !important;
     position: fixed; /* or absolute if centering within a positioned ancestor */
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 20rem;
     height: 20rem;
+    border-radius: 25px;
   }
+
 </style>
 <nav class="d-flex align-items-center gap-3 px-3 w-100">
   <a class="navbar-brand d-flex align-items-center" href="/home">
@@ -53,7 +56,18 @@
   </button>
   </div>
  <div class="profileDetails" id="profileDetails" popover>
-  <h4><%= user.username %></h4>
+  <div>
+    <form action="" class="p-3 m-2">
+      <label for="username" class="form-label">Username</label>
+      <input type="text" class="form-control" disabled id="username" value="<%= user.username %>">
+      <br>
+      <label for="email" class="form-label">Email</label>
+      <input type="email" id="email" disabled class="form-control" value="<%= user.email %>">
+      <br>
+      <label for="role" class="form-label">Role</label>
+      <input type="text" class="form-control" value="Project Manager" id="role" disabled>
+    </form>
+  </div>
  </div>
 
 
