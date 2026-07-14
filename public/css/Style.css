@@ -994,3 +994,15 @@ main {
     transform-origin: left;
   }
 }
+.create {
+  background-color: #f6f7f8;
+  min-height: 100vh;
+}
+
+form {
+  background-color: white;
+}
+
+.ticket {
+  border-radius: 10px;
+}
